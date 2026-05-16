@@ -26,8 +26,8 @@ API.interceptors.request.use(cfg => {
 
 // ─── CONSTANTS ───────────────────────────────────────────────────────────────
 const STADIUMS = [
-  { id: 'open', name: 'Open Stadium', type: 'open', price: 200000, emoji: '🏟️', desc: 'Championship-grade open-air pitch with floodlights and natural turf.' },
-  { id: 'indoor', name: 'Indoor Stadium', type: 'indoor', price: 200000, emoji: '🏛️', desc: 'Climate-controlled indoor arena with premium synthetic surface.' },
+  { id: 'open', name: 'Ochiq Stadion', type: 'open', price: 200000, emoji: '🏟️', desc: 'Chiroqlar va tabiiy maysazor bilan jihozlangan chempionat darajasidagi ochiq maydon.' },
+  { id: 'indoor', name: 'Yopiq Stadion', type: 'indoor', price: 200000, emoji: '🏛️', desc: 'Premium sintetik yuzali iqlim nazorati ostidagi yopiq arena.' },
 ];
 const HOURS = Array.from({ length: 19 }, (_, i) => i + 6); // 6..24
 const UZS = n => new Intl.NumberFormat('uz-UZ').format(n) + ' UZS';
@@ -293,7 +293,7 @@ function LoadingScreen({ onDone }) {
       </motion.div>
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.7 }}
         style={{ color: '#00ff66', fontSize: 13, letterSpacing: 4, fontFamily: 'Syne, sans-serif', marginBottom: 40 }}>
-        PREMIUM FOOTBALL BOOKING
+        PREMIUM FUTBOL BRONLASH
       </motion.div>
       <motion.div initial={{ width: 0 }} animate={{ width: 200 }} transition={{ delay: 0.9, duration: 1.2, ease: 'easeInOut' }}
         style={{ height: 2, background: 'linear-gradient(90deg, transparent, #00ff66, transparent)', borderRadius: 99 }} />
@@ -311,9 +311,9 @@ function Navbar({ page, setPage, adminToken, onAdminLogout }) {
     return () => window.removeEventListener('scroll', h);
   }, []);
   const navLinks = [
-    { label: 'Home', key: 'home' },
-    { label: 'Book Now', key: 'book' },
-    { label: 'Stadiums', key: 'stadiums' },
+    { label: 'Bosh sahifa', key: 'home' },
+    { label: 'Bronlash', key: 'book' },
+    { label: 'Stadionlar', key: 'stadiums' },
   ];
   return (
     <motion.nav initial={{ y: -80, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.6, delay: 0.2 }}
@@ -347,12 +347,12 @@ function Navbar({ page, setPage, adminToken, onAdminLogout }) {
           {adminToken ? (
             <>
               <button onClick={() => setPage('admin')} className="btn-secondary" style={{ padding: '9px 18px', fontSize: 13 }}>Admin Panel</button>
-              <button onClick={onAdminLogout} className="btn-danger" style={{ padding: '9px 16px', fontSize: 13 }}>Logout</button>
+              <button onClick={onAdminLogout} className="btn-danger" style={{ padding: '9px 16px', fontSize: 13 }}>Chiqish</button>
             </>
           ) : (
             <button onClick={() => setPage('admin-login')} className="btn-secondary" style={{ padding: '9px 18px', fontSize: 13 }}>Admin</button>
           )}
-          <button onClick={() => setPage('book')} className="btn-primary" style={{ padding: '10px 22px', fontSize: 14 }}>Book Now</button>
+          <button onClick={() => setPage('book')} className="btn-primary" style={{ padding: '10px 22px', fontSize: 14 }}>Bronlash</button>
         </div>
         <button className="hide-desktop" onClick={() => setMobileOpen(v => !v)}
           style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border)', borderRadius: 10, padding: '8px 12px', color: '#fff', fontSize: 18 }}>
@@ -373,9 +373,9 @@ function Navbar({ page, setPage, adminToken, onAdminLogout }) {
               {adminToken ? (
                 <button onClick={() => { setPage('admin'); setMobileOpen(false); }} className="btn-secondary" style={{ width: '100%', textAlign: 'center' }}>Admin Panel</button>
               ) : (
-                <button onClick={() => { setPage('admin-login'); setMobileOpen(false); }} className="btn-secondary" style={{ width: '100%', textAlign: 'center' }}>Admin Login</button>
+                <button onClick={() => { setPage('admin-login'); setMobileOpen(false); }} className="btn-secondary" style={{ width: '100%', textAlign: 'center' }}>Admin kirish</button>
               )}
-              <button onClick={() => { setPage('book'); setMobileOpen(false); }} className="btn-primary" style={{ width: '100%', textAlign: 'center' }}>Book Now</button>
+              <button onClick={() => { setPage('book'); setMobileOpen(false); }} className="btn-primary" style={{ width: '100%', textAlign: 'center' }}>Bronlash</button>
             </div>
           </motion.div>
         )}
@@ -399,31 +399,31 @@ function HeroSection({ setPage }) {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
           style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(0,255,102,0.08)', border: '1px solid rgba(0,255,102,0.2)', borderRadius: 99, padding: '6px 18px', marginBottom: 32 }}>
           <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#00ff66', animation: 'blink 1.5s infinite', display: 'inline-block' }} />
-          <span style={{ fontSize: 12, color: '#00ff66', fontFamily: 'Syne, sans-serif', fontWeight: 600, letterSpacing: 1.5 }}>REAL-TIME AVAILABILITY</span>
+          <span style={{ fontSize: 12, color: '#00ff66', fontFamily: 'Syne, sans-serif', fontWeight: 600, letterSpacing: 1.5 }}>REAL VAQTDA MAVJUDLIK</span>
         </motion.div>
         <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
           style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 'clamp(60px, 12vw, 120px)', letterSpacing: 4, lineHeight: 0.95, marginBottom: 24, color: '#fff' }}>
-          BOOK YOUR<br />
-          <span className="shimmer-text">STADIUM</span><br />
-          INSTANTLY
+          STADIONINGIZNI<br />
+          <span className="shimmer-text">HOZIROQ</span><br />
+          BRONLANG
         </motion.h1>
         <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}
           style={{ fontSize: 18, color: 'var(--text2)', lineHeight: 1.7, marginBottom: 40, maxWidth: 560, margin: '0 auto 40px' }}>
-          Reserve premium football pitches in seconds. Real-time slot availability, instant confirmation, and seamless booking experience.
+          Premium futbol maydonlarini soniyalar ichida band qiling. Real vaqtda slot mavjudligi, darhol tasdiqlash va qulay bronlash tajribasi.
         </motion.p>
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }}
           style={{ display: 'flex', gap: 14, justifyContent: 'center', flexWrap: 'wrap' }}>
           <button onClick={() => setPage('book')} className="btn-primary" style={{ padding: '16px 36px', fontSize: 16, borderRadius: 14 }}>
-            ⚽ Book Now
+            ⚽ Bronlash
           </button>
           <button onClick={() => setPage('stadiums')} className="btn-secondary" style={{ padding: '16px 36px', fontSize: 16, borderRadius: 14 }}>
-            View Stadiums →
+            Stadionlarni ko'rish →
           </button>
         </motion.div>
         {/* Stats */}
         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8 }}
           style={{ display: 'flex', justifyContent: 'center', gap: 40, marginTop: 70, flexWrap: 'wrap' }}>
-          {[['2', 'Premium Pitches'], ['18hrs', 'Daily Access'], ['200K', 'UZS/Hour']].map(([v, l]) => (
+          {[['2', 'Premium Maydon'], ['18soat', 'Kunlik Kirish'], ['200K', 'UZS/Soat']].map(([v, l]) => (
             <div key={l} style={{ textAlign: 'center' }}>
               <div style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 36, color: '#fff', letterSpacing: 2 }}>{v}</div>
               <div style={{ fontSize: 12, color: 'var(--text3)', letterSpacing: 1.5, textTransform: 'uppercase', fontFamily: 'Syne, sans-serif' }}>{l}</div>
@@ -466,7 +466,9 @@ function StadiumCard({ stadium, onBook, compact }) {
           <motion.span animate={{ scale: hovered ? 1.2 : 1 }} transition={{ duration: 0.3 }} style={{ fontSize: compact ? 50 : 72, filter: 'drop-shadow(0 0 20px rgba(255,255,255,0.3))' }}>{stadium.emoji}</motion.span>
         </div>
         <div style={{ position: 'absolute', top: 14, right: 14, background: 'rgba(0,0,0,0.5)', borderRadius: 99, padding: '4px 12px', border: '1px solid rgba(255,255,255,0.1)' }}>
-          <span style={{ fontSize: 11, fontFamily: 'Syne, sans-serif', fontWeight: 700, letterSpacing: 1.5, color: stadium.type === 'open' ? '#00ff66' : '#4f9eff' }}>{stadium.type.toUpperCase()}</span>
+          <span style={{ fontSize: 11, fontFamily: 'Syne, sans-serif', fontWeight: 700, letterSpacing: 1.5, color: stadium.type === 'open' ? '#00ff66' : '#4f9eff' }}>
+            {stadium.type === 'open' ? 'OCHIQ' : 'YOPIQ'}
+          </span>
         </div>
       </div>
       <div style={{ padding: compact ? '18px 20px' : '24px 28px' }}>
@@ -474,12 +476,12 @@ function StadiumCard({ stadium, onBook, compact }) {
         {!compact && <p style={{ fontSize: 14, color: 'var(--text2)', lineHeight: 1.6, marginBottom: 20 }}>{stadium.desc}</p>}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: compact ? 12 : 0 }}>
           <div>
-            <div style={{ fontSize: 11, color: 'var(--text3)', fontFamily: 'Syne, sans-serif', letterSpacing: 1, marginBottom: 2 }}>PER HOUR</div>
+            <div style={{ fontSize: 11, color: 'var(--text3)', fontFamily: 'Syne, sans-serif', letterSpacing: 1, marginBottom: 2 }}>SOATIGA</div>
             <div style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 24, color: '#fff', letterSpacing: 1 }}>{UZS(stadium.price)}</div>
           </div>
           {onBook && (
             <button onClick={() => onBook(stadium)} className="btn-primary" style={{ padding: '10px 20px', fontSize: 13, borderRadius: 12 }}>
-              Book
+              Bronlash
             </button>
           )}
         </div>
@@ -512,15 +514,15 @@ function StadiumsPage({ setPage, bookings }) {
   return (
     <div style={{ minHeight: '100vh', paddingTop: 90, paddingBottom: 60, maxWidth: 1100, margin: '0 auto', padding: '90px 24px 60px' }}>
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-        <h1 style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 52, letterSpacing: 3, marginBottom: 6 }}>OUR STADIUMS</h1>
-        <p style={{ color: 'var(--text2)', marginBottom: 40 }}>Choose your pitch and view live availability</p>
+        <h1 style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 52, letterSpacing: 3, marginBottom: 6 }}>BIZNING STADIONLAR</h1>
+        <p style={{ color: 'var(--text2)', marginBottom: 40 }}>Maydoningizni tanlang va jonli mavjudlikni ko'ring</p>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 20, marginBottom: 48 }}>
           {STADIUMS.map(s => <StadiumCard key={s.id} stadium={s} onBook={() => setPage('book')} />)}
         </div>
         {/* Availability grid */}
         <div className="glass" style={{ borderRadius: 24, padding: '28px 32px' }}>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16, alignItems: 'center', marginBottom: 28 }}>
-            <h2 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: 20, flex: 1 }}>Live Availability</h2>
+            <h2 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: 20, flex: 1 }}>Jonli Mavjudlik</h2>
             <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
               {STADIUMS.map(s => (
                 <button key={s.id} onClick={() => setSelectedStadium(s.id)}
@@ -545,14 +547,14 @@ function StadiumsPage({ setPage, bookings }) {
                   style={{ borderRadius: 10, padding: '10px 0', textAlign: 'center', fontSize: 13, fontFamily: 'Syne, sans-serif', fontWeight: 600, transition: 'all 0.2s' }}>
                   <div>{fmtHour(h)}</div>
                   <div style={{ fontSize: 9, marginTop: 3, opacity: 0.7, letterSpacing: 0.5 }}>
-                    {status === 'available' ? 'FREE' : status === 'active' ? 'LIVE' : 'TAKEN'}
+                    {status === 'available' ? 'BO\'SH' : status === 'active' ? 'JONLI' : 'BAND'}
                   </div>
                 </motion.div>
               );
             })}
           </div>
           <div style={{ display: 'flex', gap: 20, marginTop: 20, flexWrap: 'wrap' }}>
-            {[['slot-available', '#00ff66', 'Available'], ['slot-booked', '#ff3b30', 'Booked'], ['slot-active', '#00ff66', 'Live Now']].map(([cls, color, label]) => (
+            {[['slot-available', '#00ff66', 'Bo\'sh'], ['slot-booked', '#ff3b30', 'Band'], ['slot-active', '#00ff66', 'Hozir Jonli']].map(([cls, color, label]) => (
               <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: 'var(--text2)' }}>
                 <div style={{ width: 10, height: 10, borderRadius: 3, background: color + '33', border: `1px solid ${color}66` }} />
                 {label}
@@ -589,10 +591,10 @@ function BookingPage({ bookings, onBookingCreated }) {
   };
 
   const handleSubmit = async () => {
-    if (!form.name.trim() || !form.phone.trim()) return toast('Please fill all fields', 'error');
-    if (form.phone.length < 9) return toast('Enter a valid phone number', 'error');
-    if (startHour < 6 || startHour + form.duration > 24) return toast('Booking must be within 06:00–00:00', 'error');
-    if (isSlotConflict()) return toast('Selected time slot is already booked!', 'error');
+    if (!form.name.trim() || !form.phone.trim()) return toast('Barcha maydonlarni to\'ldiring', 'error');
+    if (form.phone.length < 9) return toast('To\'g\'ri telefon raqam kiriting', 'error');
+    if (startHour < 6 || startHour + form.duration > 24) return toast('Bronlash 06:00–00:00 oralig\'ida bo\'lishi kerak', 'error');
+    if (isSlotConflict()) return toast('Tanlangan vaqt allaqachon band!', 'error');
     setLoading(true);
     try {
       const res = await API.post('/bookings', {
@@ -601,9 +603,9 @@ function BookingPage({ bookings, onBookingCreated }) {
       });
       setSuccessData(res.data.booking);
       onBookingCreated(res.data.booking);
-      toast('Booking confirmed! 🎉', 'success');
+      toast('Bronlash tasdiqlandi! 🎉', 'success');
     } catch (err) {
-      toast(err.response?.data?.message || 'Booking failed. Please try again.', 'error');
+      toast(err.response?.data?.message || 'Bronlash amalga oshmadi. Qaytadan urinib ko\'ring.', 'error');
     }
     setLoading(false);
   };
@@ -614,66 +616,66 @@ function BookingPage({ bookings, onBookingCreated }) {
     <div style={{ minHeight: '100vh', paddingTop: 90, paddingBottom: 60 }}>
       <div style={{ maxWidth: 780, margin: '0 auto', padding: '0 24px' }}>
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-          <h1 style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 52, letterSpacing: 3, marginBottom: 6 }}>BOOK A STADIUM</h1>
-          <p style={{ color: 'var(--text2)', marginBottom: 36 }}>Fill in the details to reserve your pitch</p>
+          <h1 style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 52, letterSpacing: 3, marginBottom: 6 }}>STADION BRONLASH</h1>
+          <p style={{ color: 'var(--text2)', marginBottom: 36 }}>Maydoningizni band qilish uchun ma'lumotlarni kiriting</p>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 40, alignItems: 'start' }}>
             {/* Form */}
             <div className="glass" style={{ borderRadius: 24, padding: '32px 28px', display: 'flex', flexDirection: 'column', gap: 20 }}>
               <div className="field">
-                <label>Full Name</label>
-                <input placeholder="Your full name" value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} />
+                <label>To'liq Ism</label>
+                <input placeholder="To'liq ismingiz" value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} />
               </div>
               <div className="field">
-                <label>Phone Number</label>
+                <label>Telefon Raqam</label>
                 <input placeholder="+998 90 123 45 67" value={form.phone} onChange={e => setForm(f => ({ ...f, phone: e.target.value }))} />
               </div>
               <div className="field">
-                <label>Stadium</label>
+                <label>Stadion</label>
                 <select value={form.stadium} onChange={e => setForm(f => ({ ...f, stadium: e.target.value }))}>
                   {STADIUMS.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
                 </select>
               </div>
               <div className="field">
-                <label>Date</label>
+                <label>Sana</label>
                 <input type="date" value={form.date} min={TODAY()} onChange={e => setForm(f => ({ ...f, date: e.target.value }))} />
               </div>
               <div className="field">
-                <label>Start Time</label>
+                <label>Boshlanish Vaqti</label>
                 <select value={form.startTime} onChange={e => setForm(f => ({ ...f, startTime: e.target.value }))}>
                   {HOURS.slice(0, 18).map(h => <option key={h} value={h}>{fmtHour(h)}</option>)}
                 </select>
               </div>
               <div className="field">
-                <label>Duration (hours)</label>
+                <label>Davomiyligi (soat)</label>
                 <select value={form.duration} onChange={e => setForm(f => ({ ...f, duration: parseInt(e.target.value) }))}>
-                  {[1, 2, 3, 4, 5, 6].map(d => <option key={d} value={d}>{d} hour{d > 1 ? 's' : ''}</option>)}
+                  {[1, 2, 3, 4, 5, 6].map(d => <option key={d} value={d}>{d} soat</option>)}
                 </select>
               </div>
               {isConflict && (
                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
                   style={{ background: 'rgba(255,59,48,0.1)', border: '1px solid rgba(255,59,48,0.3)', borderRadius: 10, padding: '10px 14px', fontSize: 13, color: 'var(--red)' }}>
-                  ⚠️ Time slot conflict detected. Please choose another time.
+                  ⚠️ Vaqt to'qnashuvi aniqlandi. Boshqa vaqt tanlang.
                 </motion.div>
               )}
               {/* Price summary */}
               <div style={{ background: 'rgba(0,255,102,0.05)', border: '1px solid rgba(0,255,102,0.15)', borderRadius: 14, padding: '16px 18px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, color: 'var(--text2)', marginBottom: 6 }}>
-                  <span>{form.duration} hour{form.duration > 1 ? 's' : ''} × 200,000 UZS</span>
+                  <span>{form.duration} soat × 200,000 UZS</span>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: 13 }}>TOTAL</span>
+                  <span style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: 13 }}>JAMI</span>
                   <span style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 26, color: 'var(--green)', letterSpacing: 1 }}>{UZS(totalPrice)}</span>
                 </div>
               </div>
               <button onClick={handleSubmit} disabled={loading || isConflict} className="btn-primary"
                 style={{ width: '100%', padding: '16px', fontSize: 15, opacity: (loading || isConflict) ? 0.6 : 1, cursor: (loading || isConflict) ? 'not-allowed' : 'pointer' }}>
-                {loading ? 'Confirming...' : '⚽ Confirm Booking'}
+                {loading ? 'Tasdiqlanmoqda...' : '⚽ Bronlashni Tasdiqlash'}
               </button>
             </div>
             {/* Slot visualizer */}
             <div>
               <div className="glass" style={{ borderRadius: 24, padding: '24px 20px' }}>
-                <h3 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: 16, marginBottom: 16 }}>Time Slot Availability</h3>
+                <h3 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: 16, marginBottom: 16 }}>Vaqt Slotlari Mavjudligi</h3>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 6 }}>
                   {HOURS.map(h => {
                     const isBooked = bookedSlots.includes(h);
@@ -697,11 +699,11 @@ function BookingPage({ bookings, onBookingCreated }) {
                 <div style={{ marginTop: 16, fontSize: 11, color: 'var(--text3)', display: 'flex', flexDirection: 'column', gap: 6 }}>
                   <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
                     <div style={{ width: 10, height: 10, borderRadius: 3, background: 'rgba(0,255,102,0.15)', border: '1px solid rgba(0,255,102,0.4)' }} />
-                    Your selection
+                    Sizning tanlovingiz
                   </div>
                   <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
                     <div style={{ width: 10, height: 10, borderRadius: 3, background: 'rgba(255,59,48,0.1)', border: '1px solid rgba(255,59,48,0.3)' }} />
-                    Already booked
+                    Allaqachon band
                   </div>
                 </div>
               </div>
@@ -721,25 +723,25 @@ function BookingPage({ bookings, onBookingCreated }) {
               style={{ background: 'linear-gradient(145deg, #0d1221 0%, #080c16 100%)', border: '1px solid rgba(0,255,102,0.3)', borderRadius: 28, padding: '40px 36px', maxWidth: 440, width: '100%', boxShadow: '0 0 60px rgba(0,255,102,0.15), 0 40px 80px rgba(0,0,0,0.6)', textAlign: 'center' }}>
               <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.2, type: 'spring', stiffness: 300 }}
                 style={{ fontSize: 64, marginBottom: 20 }}>🎉</motion.div>
-              <h2 style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 36, letterSpacing: 3, marginBottom: 6, color: 'var(--green)' }}>BOOKING CONFIRMED!</h2>
-              <p style={{ color: 'var(--text2)', fontSize: 14, marginBottom: 28 }}>Your stadium has been reserved successfully</p>
+              <h2 style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 36, letterSpacing: 3, marginBottom: 6, color: 'var(--green)' }}>BRONLASH TASDIQLANDI!</h2>
+              <p style={{ color: 'var(--text2)', fontSize: 14, marginBottom: 28 }}>Stadioningiz muvaffaqiyatli band qilindi</p>
               <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 16, padding: '20px 24px', textAlign: 'left', display: 'flex', flexDirection: 'column', gap: 12 }}>
                 {[
-                  ['Booking ID', '#' + successData._id?.slice(-8).toUpperCase()],
-                  ['Stadium', STADIUMS.find(s => s.id === successData.stadium)?.name],
-                  ['Date', successData.date],
-                  ['Time', `${successData.startTime} — ${fmtHour(parseInt(successData.startTime) + successData.duration)}`],
-                  ['Duration', `${successData.duration} hour${successData.duration > 1 ? 's' : ''}`],
-                  ['Total', UZS(successData.totalPrice)],
+                  ['Bron ID', '#' + successData._id?.slice(-8).toUpperCase()],
+                  ['Stadion', STADIUMS.find(s => s.id === successData.stadium)?.name],
+                  ['Sana', successData.date],
+                  ['Vaqt', `${successData.startTime} — ${fmtHour(parseInt(successData.startTime) + successData.duration)}`],
+                  ['Davomiyligi', `${successData.duration} soat`],
+                  ['Jami', UZS(successData.totalPrice)],
                 ].map(([k, v]) => (
                   <div key={k} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 14 }}>
                     <span style={{ color: 'var(--text2)' }}>{k}</span>
-                    <span style={{ fontWeight: 600, color: k === 'Total' ? 'var(--green)' : '#fff' }}>{v}</span>
+                    <span style={{ fontWeight: 600, color: k === 'Jami' ? 'var(--green)' : '#fff' }}>{v}</span>
                   </div>
                 ))}
               </div>
               <button onClick={() => setSuccessData(null)} className="btn-primary" style={{ width: '100%', marginTop: 24, padding: '14px' }}>
-                Done
+                Tayyor
               </button>
             </motion.div>
           </motion.div>
@@ -755,15 +757,15 @@ function AdminLogin({ onLogin }) {
   const [form, setForm] = useState({ username: '', password: '' });
   const [loading, setLoading] = useState(false);
   const handleSubmit = async () => {
-    if (!form.username || !form.password) return toast('Enter credentials', 'error');
+    if (!form.username || !form.password) return toast('Ma\'lumotlarni kiriting', 'error');
     setLoading(true);
     try {
       const res = await API.post('/admin/login', form);
       localStorage.setItem('admin_token', res.data.token);
       onLogin(res.data.token);
-      toast('Welcome back, Admin!', 'success');
+      toast('Xush kelibsiz, Admin!', 'success');
     } catch (err) {
-      toast(err.response?.data?.message || 'Invalid credentials', 'error');
+      toast(err.response?.data?.message || 'Noto\'g\'ri ma\'lumotlar', 'error');
     }
     setLoading(false);
   };
@@ -773,22 +775,22 @@ function AdminLogin({ onLogin }) {
         style={{ width: '100%', maxWidth: 400, background: 'rgba(13,18,33,0.8)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 28, padding: '44px 36px', backdropFilter: 'blur(20px)' }}>
         <div style={{ textAlign: 'center', marginBottom: 36 }}>
           <div style={{ fontSize: 40, marginBottom: 12 }}>🔐</div>
-          <h1 style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 32, letterSpacing: 3 }}>ADMIN ACCESS</h1>
-          <p style={{ color: 'var(--text2)', fontSize: 14, marginTop: 4 }}>StadiumX Control Panel</p>
+          <h1 style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 32, letterSpacing: 3 }}>ADMIN KIRISH</h1>
+          <p style={{ color: 'var(--text2)', fontSize: 14, marginTop: 4 }}>StadiumX Boshqaruv Paneli</p>
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
           <div className="field">
-            <label>Username</label>
+            <label>Foydalanuvchi nomi</label>
             <input placeholder="admin" value={form.username} onChange={e => setForm(f => ({ ...f, username: e.target.value }))}
               onKeyDown={e => e.key === 'Enter' && handleSubmit()} />
           </div>
           <div className="field">
-            <label>Password</label>
+            <label>Parol</label>
             <input type="password" placeholder="••••••••" value={form.password} onChange={e => setForm(f => ({ ...f, password: e.target.value }))}
               onKeyDown={e => e.key === 'Enter' && handleSubmit()} />
           </div>
           <button onClick={handleSubmit} disabled={loading} className="btn-primary" style={{ width: '100%', padding: '15px', marginTop: 4, opacity: loading ? 0.7 : 1 }}>
-            {loading ? 'Signing in...' : 'Sign In →'}
+            {loading ? 'Kirilmoqda...' : 'Kirish →'}
           </button>
         </div>
       </motion.div>
@@ -829,19 +831,19 @@ function AdminPanel({ adminToken, onLogout }) {
     try {
       await API.patch(`/admin/bookings/${id}/cancel`);
       setBookings(prev => prev.map(b => b._id === id ? { ...b, status: 'cancelled' } : b));
-      toast('Booking cancelled', 'success');
+      toast('Bronlash bekor qilindi', 'success');
       fetchAll();
-    } catch { toast('Failed to cancel', 'error'); }
+    } catch { toast('Bekor qilishda xatolik', 'error'); }
   };
 
   const handleDelete = async id => {
-    if (!confirm('Delete this booking permanently?')) return;
+    if (!confirm('Bu bronlashni butunlay o\'chirib tashlamoqchimisiz?')) return;
     try {
       await API.delete(`/admin/bookings/${id}`);
       setBookings(prev => prev.filter(b => b._id !== id));
-      toast('Booking deleted', 'success');
+      toast('Bronlash o\'chirildi', 'success');
       fetchAll();
-    } catch { toast('Failed to delete', 'error'); }
+    } catch { toast('O\'chirishda xatolik', 'error'); }
   };
 
   const filtered = bookings.filter(b =>
@@ -851,10 +853,10 @@ function AdminPanel({ adminToken, onLogout }) {
   );
 
   const tabs = [
-    { key: 'dashboard', label: '📊 Dashboard' },
-    { key: 'bookings', label: '📋 Bookings' },
-    { key: 'live', label: '🔴 Live Status' },
-    { key: 'analytics', label: '📈 Analytics' },
+    { key: 'dashboard', label: '📊 Boshqaruv' },
+    { key: 'bookings', label: '📋 Bronlar' },
+    { key: 'live', label: '🔴 Jonli Holat' },
+    { key: 'analytics', label: '📈 Tahlil' },
   ];
 
   if (loading) return (
@@ -871,7 +873,7 @@ function AdminPanel({ adminToken, onLogout }) {
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 32, flexWrap: 'wrap', gap: 16 }}>
             <div>
               <h1 style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 44, letterSpacing: 3, marginBottom: 4 }}>ADMIN PANEL</h1>
-              <p style={{ color: 'var(--text2)', fontSize: 14 }}>StadiumX Management System</p>
+              <p style={{ color: 'var(--text2)', fontSize: 14 }}>StadiumX Boshqaruv Tizimi</p>
             </div>
           </div>
           {/* Tabs */}
@@ -893,12 +895,12 @@ function AdminPanel({ adminToken, onLogout }) {
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16, marginBottom: 24 }}>
                 {[
-                  { label: 'Total Bookings', value: analytics.total, icon: '📋', color: 'var(--blue)' },
-                  { label: 'Active Bookings', value: analytics.active, icon: '✅', color: 'var(--green)' },
-                  { label: 'Today\'s Revenue', value: UZS(analytics.dailyRevenue), icon: '💰', color: 'var(--gold)', small: true },
-                  { label: 'Monthly Revenue', value: UZS(analytics.monthlyRevenue), icon: '📆', color: '#ff9500', small: true },
-                  { label: 'Yearly Revenue', value: UZS(analytics.yearlyRevenue), icon: '🏆', color: '#bf5af2', small: true },
-                  { label: 'Total Revenue', value: UZS(analytics.totalRevenue), icon: '💎', color: 'var(--green)', small: true },
+                  { label: 'Jami Bronlar', value: analytics.total, icon: '📋', color: 'var(--blue)' },
+                  { label: 'Faol Bronlar', value: analytics.active, icon: '✅', color: 'var(--green)' },
+                  { label: 'Bugungi Daromad', value: UZS(analytics.dailyRevenue), icon: '💰', color: 'var(--gold)', small: true },
+                  { label: 'Oylik Daromad', value: UZS(analytics.monthlyRevenue), icon: '📆', color: '#ff9500', small: true },
+                  { label: 'Yillik Daromad', value: UZS(analytics.yearlyRevenue), icon: '🏆', color: '#bf5af2', small: true },
+                  { label: 'Umumiy Daromad', value: UZS(analytics.totalRevenue), icon: '💎', color: 'var(--green)', small: true },
                 ].map(card => (
                   <motion.div key={card.label} whileHover={{ y: -3 }}
                     style={{ background: 'rgba(13,18,33,0.8)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 18, padding: '20px 22px', backdropFilter: 'blur(10px)' }}>
@@ -910,7 +912,7 @@ function AdminPanel({ adminToken, onLogout }) {
               </div>
               {/* Recent bookings preview */}
               <div className="glass" style={{ borderRadius: 20, padding: '24px' }}>
-                <h3 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: 16, marginBottom: 16 }}>Recent Bookings</h3>
+                <h3 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: 16, marginBottom: 16 }}>So'nggi Bronlar</h3>
                 {bookings.slice(0, 5).map(b => (
                   <div key={b._id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 0', borderBottom: '1px solid rgba(255,255,255,0.04)', fontSize: 14, flexWrap: 'wrap', gap: 8 }}>
                     <div>
@@ -924,7 +926,9 @@ function AdminPanel({ adminToken, onLogout }) {
                         background: b.status === 'active' ? 'rgba(0,255,102,0.15)' : b.status === 'cancelled' ? 'rgba(255,59,48,0.15)' : 'rgba(255,255,255,0.08)',
                         color: b.status === 'active' ? 'var(--green)' : b.status === 'cancelled' ? 'var(--red)' : 'var(--text2)',
                         border: `1px solid ${b.status === 'active' ? 'rgba(0,255,102,0.3)' : b.status === 'cancelled' ? 'rgba(255,59,48,0.3)' : 'rgba(255,255,255,0.1)'}`,
-                      }}>{b.status?.toUpperCase()}</span>
+                      }}>
+                        {b.status === 'active' ? 'FAOL' : b.status === 'cancelled' ? 'BEKOR' : b.status?.toUpperCase()}
+                      </span>
                     </div>
                   </div>
                 ))}
@@ -936,21 +940,21 @@ function AdminPanel({ adminToken, onLogout }) {
           {tab === 'bookings' && (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
               <div style={{ display: 'flex', gap: 12, marginBottom: 20, flexWrap: 'wrap' }}>
-                <input placeholder="Filter by phone..." value={search.phone} onChange={e => setSearch(s => ({ ...s, phone: e.target.value }))}
+                <input placeholder="Telefon raqam bo'yicha..." value={search.phone} onChange={e => setSearch(s => ({ ...s, phone: e.target.value }))}
                   style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 10, padding: '10px 14px', color: '#fff', fontSize: 13, fontFamily: 'DM Sans, sans-serif', flex: 1, minWidth: 160 }} />
                 <input type="date" value={search.date} onChange={e => setSearch(s => ({ ...s, date: e.target.value }))}
                   style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 10, padding: '10px 14px', color: '#fff', fontSize: 13, fontFamily: 'DM Sans, sans-serif' }} />
                 <select value={search.stadium} onChange={e => setSearch(s => ({ ...s, stadium: e.target.value }))}
                   style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 10, padding: '10px 14px', color: '#fff', fontSize: 13, fontFamily: 'DM Sans, sans-serif' }}>
-                  <option value="">All Stadiums</option>
+                  <option value="">Barcha Stadionlar</option>
                   {STADIUMS.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
                 </select>
                 {(search.phone || search.date || search.stadium) && (
-                  <button onClick={() => setSearch({ phone: '', date: '', stadium: '' })} className="btn-secondary" style={{ padding: '10px 16px', fontSize: 13 }}>Clear</button>
+                  <button onClick={() => setSearch({ phone: '', date: '', stadium: '' })} className="btn-secondary" style={{ padding: '10px 16px', fontSize: 13 }}>Tozalash</button>
                 )}
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                {filtered.length === 0 && <div style={{ textAlign: 'center', padding: '60px 0', color: 'var(--text2)' }}>No bookings found</div>}
+                {filtered.length === 0 && <div style={{ textAlign: 'center', padding: '60px 0', color: 'var(--text2)' }}>Bronlar topilmadi</div>}
                 {filtered.map(b => (
                   <motion.div key={b._id} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }}
                     style={{ background: 'rgba(13,18,33,0.7)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 16, padding: '18px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12, backdropFilter: 'blur(10px)' }}>
@@ -960,8 +964,8 @@ function AdminPanel({ adminToken, onLogout }) {
                       <div style={{ color: 'var(--text3)', fontSize: 12, marginTop: 4 }}>#{b._id?.slice(-8).toUpperCase()}</div>
                     </div>
                     <div style={{ flex: 1, minWidth: 160, fontSize: 13 }}>
-                      <div>{b.stadium === 'open' ? '🏟️ Open Stadium' : '🏛️ Indoor Stadium'}</div>
-                      <div style={{ color: 'var(--text2)', marginTop: 2 }}>{b.date} · {b.startTime} ({b.duration}h)</div>
+                      <div>{b.stadium === 'open' ? '🏟️ Ochiq Stadion' : '🏛️ Yopiq Stadion'}</div>
+                      <div style={{ color: 'var(--text2)', marginTop: 2 }}>{b.date} · {b.startTime} ({b.duration}soat)</div>
                       <div style={{ color: 'var(--green)', fontFamily: 'Syne, sans-serif', fontWeight: 700, marginTop: 2 }}>{UZS(b.totalPrice)}</div>
                     </div>
                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 8 }}>
@@ -970,14 +974,16 @@ function AdminPanel({ adminToken, onLogout }) {
                         background: b.status === 'active' ? 'rgba(0,255,102,0.15)' : b.status === 'cancelled' ? 'rgba(255,59,48,0.15)' : 'rgba(255,255,255,0.08)',
                         color: b.status === 'active' ? 'var(--green)' : b.status === 'cancelled' ? 'var(--red)' : 'var(--text2)',
                         border: `1px solid ${b.status === 'active' ? 'rgba(0,255,102,0.3)' : b.status === 'cancelled' ? 'rgba(255,59,48,0.3)' : 'rgba(255,255,255,0.1)'}`,
-                      }}>{b.status?.toUpperCase()}</span>
+                      }}>
+                        {b.status === 'active' ? 'FAOL' : b.status === 'cancelled' ? 'BEKOR' : b.status?.toUpperCase()}
+                      </span>
                       <div style={{ display: 'flex', gap: 8 }}>
                         {b.status !== 'cancelled' && (
-                          <button onClick={() => handleCancel(b._id)} className="btn-danger" style={{ padding: '6px 14px', fontSize: 12 }}>Cancel</button>
+                          <button onClick={() => handleCancel(b._id)} className="btn-danger" style={{ padding: '6px 14px', fontSize: 12 }}>Bekor qilish</button>
                         )}
                         <button onClick={() => handleDelete(b._id)}
                           style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', color: 'var(--text2)', borderRadius: 8, padding: '6px 12px', fontSize: 12, transition: 'all 0.2s' }}>
-                          Delete
+                          O'chirish
                         </button>
                       </div>
                     </div>
@@ -992,7 +998,7 @@ function AdminPanel({ adminToken, onLogout }) {
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 24 }}>
                 <div style={{ width: 10, height: 10, borderRadius: '50%', background: 'var(--green)', animation: 'blink 1.5s infinite' }} />
-                <span style={{ fontFamily: 'Syne, sans-serif', fontWeight: 600, color: 'var(--green)', fontSize: 14 }}>LIVE — Auto-refreshing</span>
+                <span style={{ fontFamily: 'Syne, sans-serif', fontWeight: 600, color: 'var(--green)', fontSize: 14 }}>JONLI — Avtomatik yangilanmoqda</span>
               </div>
               {STADIUMS.map(stadium => {
                 const today = TODAY();
@@ -1008,13 +1014,13 @@ function AdminPanel({ adminToken, onLogout }) {
                       <div>
                         <h3 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: 18 }}>{stadium.emoji} {stadium.name}</h3>
                         <div style={{ fontSize: 13, color: 'var(--text2)', marginTop: 4 }}>
-                          {currentBooking ? `🔴 Currently occupied by ${currentBooking.name}` : '🟢 Currently available'}
+                          {currentBooking ? `🔴 Hozir band: ${currentBooking.name}` : '🟢 Hozir bo\'sh'}
                         </div>
                       </div>
                       {currentBooking && (
                         <div style={{ background: 'rgba(255,59,48,0.1)', border: '1px solid rgba(255,59,48,0.3)', borderRadius: 12, padding: '10px 16px', fontSize: 13 }}>
                           <div style={{ color: 'var(--red)', fontWeight: 600 }}>{currentBooking.name}</div>
-                          <div style={{ color: 'var(--text2)' }}>{currentBooking.startTime} + {currentBooking.duration}h</div>
+                          <div style={{ color: 'var(--text2)' }}>{currentBooking.startTime} + {currentBooking.duration}soat</div>
                         </div>
                       )}
                     </div>
@@ -1043,7 +1049,7 @@ function AdminPanel({ adminToken, onLogout }) {
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 20 }}>
                 {/* Revenue chart */}
                 <div className="glass" style={{ borderRadius: 20, padding: '24px', gridColumn: '1 / -1' }}>
-                  <h3 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: 16, marginBottom: 20 }}>Revenue Overview (Last 7 Days)</h3>
+                  <h3 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: 16, marginBottom: 20 }}>Daromad Ko'rinishi (So'nggi 7 kun)</h3>
                   <ResponsiveContainer width="100%" height={220}>
                     <AreaChart data={analytics.revenueChart || []}>
                       <defs>
@@ -1062,7 +1068,7 @@ function AdminPanel({ adminToken, onLogout }) {
                 </div>
                 {/* Bookings chart */}
                 <div className="glass" style={{ borderRadius: 20, padding: '24px' }}>
-                  <h3 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: 16, marginBottom: 20 }}>Daily Bookings</h3>
+                  <h3 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: 16, marginBottom: 20 }}>Kunlik Bronlar</h3>
                   <ResponsiveContainer width="100%" height={180}>
                     <BarChart data={analytics.revenueChart || []}>
                       <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
@@ -1075,7 +1081,7 @@ function AdminPanel({ adminToken, onLogout }) {
                 </div>
                 {/* Stadium split */}
                 <div className="glass" style={{ borderRadius: 20, padding: '24px' }}>
-                  <h3 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: 16, marginBottom: 20 }}>Stadium Usage Split</h3>
+                  <h3 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: 16, marginBottom: 20 }}>Stadion Foydalanish Ulushi</h3>
                   <ResponsiveContainer width="100%" height={180}>
                     <PieChart>
                       <Pie data={analytics.stadiumSplit || []} dataKey="count" nameKey="stadium" cx="50%" cy="50%" outerRadius={70} paddingAngle={4}>
@@ -1125,8 +1131,8 @@ export default function App() {
           <HeroSection setPage={setPage} />
           <div style={{ maxWidth: 1100, margin: '0 auto', padding: '0 24px 80px' }}>
             <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} style={{ marginBottom: 48 }}>
-              <h2 style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 42, letterSpacing: 3, marginBottom: 8 }}>CHOOSE YOUR PITCH</h2>
-              <p style={{ color: 'var(--text2)' }}>Two premium venues ready for your game</p>
+              <h2 style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 42, letterSpacing: 3, marginBottom: 8 }}>MAYDONINGIZNI TANLANG</h2>
+              <p style={{ color: 'var(--text2)' }}>O'yiningiz uchun ikkita premium maydon tayyor</p>
             </motion.div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 20 }}>
               {STADIUMS.map(s => <StadiumCard key={s.id} stadium={s} onBook={() => setPage('book')} />)}
@@ -1159,7 +1165,7 @@ export default function App() {
           {/* Footer */}
           <footer style={{ borderTop: '1px solid rgba(255,255,255,0.05)', padding: '32px 24px', textAlign: 'center' }}>
             <div style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 22, letterSpacing: 3, color: '#fff', marginBottom: 6 }}>STADIUMX</div>
-            <div style={{ fontSize: 13, color: 'var(--text3)' }}>© 2025 StadiumX. Premium Football Booking Platform.</div>
+            <div style={{ fontSize: 13, color: 'var(--text3)' }}>© 2025 StadiumX. Premium Futbol Bronlash Platformasi.</div>
           </footer>
         </motion.div>
       )}
