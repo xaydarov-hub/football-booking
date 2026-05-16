@@ -23,10 +23,10 @@ API.interceptors.request.use(cfg => {
   if (token) cfg.headers.Authorization = `Bearer ${token}`;
   return cfg;
 });
-
+// admin
 // ─── CONSTANTS ───────────────────────────────────────────────────────────────
 const STADIUMS = [
-  { id: 'open', name: 'Ochiq Stadion', type: 'open', price: 200000, emoji: '🏟️', desc: 'Chiroqlar va tabiiy maysazor bilan jihozlangan chempionat darajasidagi ochiq maydon.' },
+  { id: 'open', name: 'Ochiq Stadion', type: 'open', price: 200000, emoji: '🏟️', desc: 'Chiroqlar va suniy maysazor bilan jihozlangan chempionat darajasidagi ochiq maydon.' },
   { id: 'indoor', name: 'Yopiq Stadion', type: 'indoor', price: 200000, emoji: '🏛️', desc: 'Premium sintetik yuzali iqlim nazorati ostidagi yopiq arena.' },
 ];
 const HOURS = Array.from({ length: 19 }, (_, i) => i + 6); // 6..24
@@ -754,7 +754,7 @@ function BookingPage({ bookings, onBookingCreated }) {
 // ─── ADMIN LOGIN ──────────────────────────────────────────────────────────────
 function AdminLogin({ onLogin }) {
   const toast = useToast();
-  const [form, setForm] = useState({ username: '', password: '' });
+  const [form, setForm] = useState({ username: 'aaaa', password: 'aaaa' });
   const [loading, setLoading] = useState(false);
   const handleSubmit = async () => {
     if (!form.username || !form.password) return toast('Ma\'lumotlarni kiriting', 'error');
