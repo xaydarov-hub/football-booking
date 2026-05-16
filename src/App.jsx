@@ -1,77 +1,129 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import axios from 'axios';
-import { io } from 'socket.io-client';
-import {
-  AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-  BarChart, Bar, PieChart, Pie, Cell, Legend
-} from 'recharts';
+import React, { useState, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import axios from "axios";
+import { io } from "socket.io-client";
 
-// ─── SOCKET SINGLETON ───────────────────────────────────────────────────────
+// ─────────────────────────────────────────────
+// ENV BASE URL (Render / Netlify friendly)
+// ─────────────────────────────────────────────
+const BASE_URL = import.meta.env.VITE_API_URL;
+
+// ─────────────────────────────────────────────
+// SOCKET SINGLETON (FIXED)
+// ─────────────────────────────────────────────
 let socket = null;
-const getSocket = () => {
+
+export const getSocket = () => {
   if (!socket) {
-    socket = io(import.meta.env.VITE_API_URL || '', { path: '/socket.io', transports: ['websocket', 'polling'] });
+    socket = io(BASE_URL, {
+      path: "/socket.io",
+      transports: ["websocket", "polling"],
+      withCredentials: true,
+    });
   }
   return socket;
 };
 
-// ─── AXIOS CONFIG ────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────
+// AXIOS INSTANCE (FIXED)
+// ─────────────────────────────────────────────
 const API = axios.create({
-  baseURL: "https://football-booking-qggl.onrender.com/api"
+  baseURL: `${BASE_URL}/api`,
+  headers: {
+    "Content-Type": "application/json",
+  },
+  withCredentials: true,
 });
 
-API.interceptors.request.use(cfg => {
-  const token = localStorage.getItem('admin_token');
-  if (token) cfg.headers.Authorization = `Bearer ${token}`;
+// token interceptor
+API.interceptors.request.use((cfg) => {
+  const token = localStorage.getItem("admin_token");
+  if (token) {
+    cfg.headers.Authorization = `Bearer ${token}`;
+  }
   return cfg;
 });
-// admin
-// ─── CONSTANTS ───────────────────────────────────────────────────────────────
-const STADIUMS = [
-  { id: 'open', name: 'Ochiq Stadion', type: 'open', price: 200000, emoji: '🏟️', desc: 'Chiroqlar va suniy maysazor bilan jihozlangan chempionat darajasidagi ochiq maydon.' },
-  { id: 'indoor', name: 'Yopiq Stadion', type: 'indoor', price: 200000, emoji: '🏛️', desc: 'Premium sintetik yuzali iqlim nazorati ostidagi yopiq arena.' },
+
+// ─────────────────────────────────────────────
+// CONSTANTS
+// ─────────────────────────────────────────────
+export const STADIUMS = [
+  {
+    id: "open",
+    name: "Ochiq Stadion",
+    type: "open",
+    price: 200000,
+    emoji: "🏟️",
+    desc: "Ochiq professional stadion",
+  },
+  {
+    id: "indoor",
+    name: "Yopiq Stadion",
+    type: "indoor",
+    price: 200000,
+    emoji: "🏛️",
+    desc: "Indoor premium arena",
+  },
 ];
-const HOURS = Array.from({ length: 19 }, (_, i) => i + 6); // 6..24
-const UZS = n => new Intl.NumberFormat('uz-UZ').format(n) + ' UZS';
-const TODAY = () => new Date().toISOString().split('T')[0];
-const pad = n => String(n).padStart(2, '0');
-const fmtHour = h => `${pad(h % 24)}:00`;
 
-// ─── TOAST SYSTEM ────────────────────────────────────────────────────────────
+export const HOURS = Array.from({ length: 19 }, (_, i) => i + 6);
+export const UZS = (n) => new Intl.NumberFormat("uz-UZ").format(n) + " UZS";
+
+// ─────────────────────────────────────────────
+// TOAST SYSTEM (FIXED)
+// ─────────────────────────────────────────────
 const ToastContext = React.createContext(null);
-const useToast = () => React.useContext(ToastContext);
+export const useToast = () => React.useContext(ToastContext);
 
-function ToastProvider({ children }) {
+export function ToastProvider({ children }) {
   const [toasts, setToasts] = useState([]);
-  const add = useCallback((msg, type = 'info') => {
-    const id = Date.now() + Math.random();
-    setToasts(t => [...t, { id, msg, type }]);
-    setTimeout(() => setToasts(t => t.filter(x => x.id !== id)), 4000);
+
+  const addToast = useCallback((msg, type = "info") => {
+    const id = Date.now();
+
+    setToasts((prev) => [...prev, { id, msg, type }]);
+
+    setTimeout(() => {
+      setToasts((prev) => prev.filter((t) => t.id !== id));
+    }, 4000);
   }, []);
+
   return (
-    <ToastContext.Provider value={add}>
+    <ToastContext.Provider value={addToast}>
       {children}
-      <div style={{ position: 'fixed', bottom: 28, right: 24, zIndex: 9999, display: 'flex', flexDirection: 'column', gap: 10, alignItems: 'flex-end' }}>
+
+      <div
+        style={{
+          position: "fixed",
+          bottom: 20,
+          right: 20,
+          display: "flex",
+          flexDirection: "column",
+          gap: 10,
+          zIndex: 9999,
+        }}
+      >
         <AnimatePresence>
-          {toasts.map(t => (
-            <motion.div key={t.id}
-              initial={{ opacity: 0, x: 80, scale: 0.9 }}
-              animate={{ opacity: 1, x: 0, scale: 1 }}
-              exit={{ opacity: 0, x: 80, scale: 0.9 }}
-              transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+          {toasts.map((t) => (
+            <motion.div
+              key={t.id}
+              initial={{ opacity: 0, x: 80 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 80 }}
               style={{
-                background: t.type === 'success' ? 'linear-gradient(135deg,#0f3 0%,#0a9a00 100%)' :
-                  t.type === 'error' ? 'linear-gradient(135deg,#ff3b30 0%,#a00000 100%)' :
-                    'linear-gradient(135deg,#1a1f2e 0%,#0d1117 100%)',
-                border: `1px solid ${t.type === 'success' ? '#00ff6640' : t.type === 'error' ? '#ff3b3040' : '#ffffff15'}`,
-                borderRadius: 14, padding: '12px 20px', color: '#fff',
-                fontSize: 14, fontFamily: 'DM Sans, sans-serif', fontWeight: 500,
-                boxShadow: '0 8px 32px rgba(0,0,0,0.4)', maxWidth: 320,
-                backdropFilter: 'blur(20px)',
+                padding: "12px 16px",
+                borderRadius: 12,
+                color: "#fff",
+                fontSize: 14,
+                background:
+                  t.type === "success"
+                    ? "#16a34a"
+                    : t.type === "error"
+                    ? "#dc2626"
+                    : "#1f2937",
               }}
             >
-              {t.type === 'success' ? '✅ ' : t.type === 'error' ? '❌ ' : 'ℹ️ '}{t.msg}
+              {t.msg}
             </motion.div>
           ))}
         </AnimatePresence>
@@ -79,6 +131,11 @@ function ToastProvider({ children }) {
     </ToastContext.Provider>
   );
 }
+
+// ─────────────────────────────────────────────
+// EXPORT API
+// ─────────────────────────────────────────────
+export { API };
 
 // ─── GLOBAL STYLES ────────────────────────────────────────────────────────────
 const GlobalStyles = () => (
