@@ -17,7 +17,10 @@ const getSocket = () => {
 };
 
 // ─── AXIOS CONFIG ────────────────────────────────────────────────────────────
-const API = axios.create({ baseURL: '/api' });
+const API = axios.create({
+  baseURL: "https://football-booking-qggl.onrender.com/api"
+});
+
 API.interceptors.request.use(cfg => {
   const token = localStorage.getItem('admin_token');
   if (token) cfg.headers.Authorization = `Bearer ${token}`;
