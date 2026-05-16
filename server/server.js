@@ -11,6 +11,8 @@ const TelegramBot = require("node-telegram-bot-api");
 const app = express();
 const server = http.createServer(app);
 
+app.set("trust proxy", 1);
+
 const io = new Server(server, {
   cors: {
     origin: "*",
@@ -21,41 +23,33 @@ const io = new Server(server, {
 app.use(cors({ origin: "*" }));
 app.use(express.json());
 
-/* ─────────────────────────────
-   MEMORY DATABASE (NO MONGODB)
-───────────────────────────── */
-
+/* ───────────── MEMORY DB ───────────── */
 let bookings = [];
 let admins = [];
 
-/* ─────────────────────────────
-   TELEGRAM BOT
-───────────────────────────── */
-
+/* ───────────── TELEGRAM ───────────── */
 let bot = null;
 
 if (process.env.TELEGRAM_BOT_TOKEN) {
   bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, {
     polling: false,
   });
-
-  console.log("✅ Telegram bot initialized");
+  console.log("✅ Telegram bot ready");
 }
 
-const sendTelegram = async (booking) => {
+const sendTelegram = async (b) => {
   if (!bot || !process.env.TELEGRAM_CHAT_ID) return;
 
   const msg = `
 ⚽ NEW BOOKING
-
-👤 ${booking.name}
-📞 ${booking.phone}
-🏟 ${booking.stadium}
-📅 ${booking.date}
-🕐 ${booking.startTime}
-⏳ ${booking.duration}h
-💰 ${booking.totalPrice} UZS
-  `;
+👤 ${b.name}
+📞 ${b.phone}
+🏟 ${b.stadium}
+📅 ${b.date}
+🕐 ${b.startTime}
+⏳ ${b.duration}h
+💰 ${b.totalPrice} UZS
+`;
 
   try {
     await bot.sendMessage(process.env.TELEGRAM_CHAT_ID, msg);
@@ -64,41 +58,33 @@ const sendTelegram = async (booking) => {
   }
 };
 
-/* ─────────────────────────────
-   ADMIN SEED
-───────────────────────────── */
-
+/* ───────────── ADMIN SEED ───────────── */
 const seedAdmin = async () => {
-  const exists = admins.find(
-    (a) => a.username === (process.env.ADMIN_USERNAME || "admin")
-  );
+  const username = process.env.ADMIN_USERNAME || "admin";
+  const password = process.env.ADMIN_PASSWORD || "admin123";
+
+  const exists = admins.find((a) => a.username === username);
 
   if (!exists) {
-    const hashedPassword = await bcrypt.hash(
-      process.env.ADMIN_PASSWORD || "admin123",
-      10
-    );
+    const hash = await bcrypt.hash(password, 10);
 
     admins.push({
       id: Date.now(),
-      username: process.env.ADMIN_USERNAME || "admin",
-      password: hashedPassword,
+      username,
+      password: hash,
     });
 
-    console.log("✅ Admin created (memory)");
+    console.log("✅ Admin created:");
+    console.log("👉 username:", username);
+    console.log("👉 password:", password);
   }
 };
 
-/* ─────────────────────────────
-   AUTH MIDDLEWARE
-───────────────────────────── */
-
+/* ───────────── AUTH ───────────── */
 const auth = (req, res, next) => {
   const token = req.headers.authorization;
 
-  if (!token) {
-    return res.status(401).json({ message: "No token" });
-  }
+  if (!token) return res.status(401).json({ message: "No token" });
 
   try {
     const decoded = jwt.verify(
@@ -113,88 +99,68 @@ const auth = (req, res, next) => {
   }
 };
 
-/* ─────────────────────────────
-   PUBLIC API
-───────────────────────────── */
-
+/* ───────────── PUBLIC API ───────────── */
 app.get("/api/bookings", (req, res) => {
   res.json(bookings);
 });
 
 app.post("/api/bookings", (req, res) => {
-  try {
-    const { name, phone, stadium, date, startTime, duration } = req.body;
+  const { name, phone, stadium, date, startTime, duration } = req.body;
 
-    const start = parseInt(startTime.split(":")[0]);
-    const dur = Number(duration);
+  const start = parseInt(startTime.split(":")[0]);
+  const dur = Number(duration);
 
-    if (start < 6 || start + dur > 24) {
-      return res.status(400).json({
-        message: "Booking allowed only 06:00 - 00:00",
-      });
-    }
-
-    const slots = Array.from({ length: dur }, (_, i) => start + i);
-
-    const conflict = bookings.find(
-      (b) =>
-        b.stadium === stadium &&
-        b.date === date &&
-        b.status === "active" &&
-        b.bookedSlots.some((s) => slots.includes(s))
-    );
-
-    if (conflict) {
-      return res.status(409).json({
-        message: "Time already booked",
-      });
-    }
-
-    const booking = {
-      id: Date.now(),
-      name,
-      phone,
-      stadium,
-      date,
-      startTime,
-      duration: dur,
-      bookedSlots: slots,
-      totalPrice: dur * 200000,
-      status: "active",
-      createdAt: new Date(),
-    };
-
-    bookings.push(booking);
-
-    io.emit("booking:new", booking);
-
-    sendTelegram(booking);
-
-    res.json({ success: true, booking });
-  } catch (e) {
-    console.log(e);
-    res.status(500).json({ message: "Server error" });
+  if (start < 6 || start + dur > 24) {
+    return res.status(400).json({ message: "06:00 - 00:00 only" });
   }
+
+  const slots = Array.from({ length: dur }, (_, i) => start + i);
+
+  const conflict = bookings.find(
+    (b) =>
+      b.stadium === stadium &&
+      b.date === date &&
+      b.status === "active" &&
+      b.bookedSlots.some((s) => slots.includes(s))
+  );
+
+  if (conflict) {
+    return res.status(409).json({ message: "Already booked" });
+  }
+
+  const booking = {
+    id: Date.now(),
+    name,
+    phone,
+    stadium,
+    date,
+    startTime,
+    duration: dur,
+    bookedSlots: slots,
+    totalPrice: dur * 200000,
+    status: "active",
+    createdAt: new Date(),
+  };
+
+  bookings.push(booking);
+
+  io.emit("booking:new", booking);
+  sendTelegram(booking);
+
+  res.json({ success: true, booking });
 });
 
-/* ─────────────────────────────
-   ADMIN LOGIN
-───────────────────────────── */
-
+/* ───────────── ADMIN LOGIN ───────────── */
 app.post("/api/admin/login", async (req, res) => {
   const { username, password } = req.body;
 
   const admin = admins.find((a) => a.username === username);
 
-  if (!admin) {
-    return res.status(401).json({ message: "Wrong login" });
-  }
+  if (!admin) return res.status(401).json({ message: "Wrong login" });
 
   const ok = await bcrypt.compare(password, admin.password);
 
-  if (!ok) {
-    return res.status(401).json({ message: "Wrong password" });
-  }
+  if (!ok) return res.status(401).json({ message: "Wrong password" });
 
   const token = jwt.sign(
     { username },
@@ -205,10 +171,7 @@ app.post("/api/admin/login", async (req, res) => {
   res.json({ token });
 });
 
-/* ─────────────────────────────
-   ADMIN API
-───────────────────────────── */
-
+/* ───────────── ADMIN BOOKINGS ───────────── */
 app.get("/api/admin/bookings", auth, (req, res) => {
   res.json(bookings);
 });
@@ -221,21 +184,36 @@ app.delete("/api/admin/bookings/:id", auth, (req, res) => {
   res.json({ success: true });
 });
 
-/* ─────────────────────────────
-   SOCKET.IO
-───────────────────────────── */
+/* ───────────── ANALYTICS (FIX 404 ERROR) ───────────── */
+app.get("/api/admin/analytics", auth, (req, res) => {
+  const total = bookings.length;
+  const active = bookings.filter((b) => b.status === "active").length;
+  const totalRevenue = bookings.reduce((s, b) => s + b.totalPrice, 0);
 
+  res.json({
+    total,
+    active,
+    totalRevenue,
+    dailyRevenue: totalRevenue,
+    monthlyRevenue: totalRevenue,
+    yearlyRevenue: totalRevenue,
+    revenueChart: [],
+    stadiumSplit: [
+      { stadium: "open", count: 1 },
+      { stadium: "indoor", count: 1 },
+    ],
+  });
+});
+
+/* ───────────── SOCKET ───────────── */
 io.on("connection", (socket) => {
   console.log("Client connected:", socket.id);
 });
 
-/* ─────────────────────────────
-   START SERVER
-───────────────────────────── */
-
+/* ───────────── START ───────────── */
 const PORT = process.env.PORT || 5000;
 
 server.listen(PORT, "0.0.0.0", async () => {
   await seedAdmin();
-  console.log("🚀 Server running on port", PORT);
+  console.log("🚀 Server running on", PORT);
 });
