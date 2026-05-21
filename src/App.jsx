@@ -83,201 +83,790 @@ function ToastProvider({ children }) {
 // ─── GLOBAL STYLES ────────────────────────────────────────────────────────────
 const GlobalStyles = () => (
   <style>{`
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
     :root {
       --bg: #04060d;
       --surface: #080c16;
       --surface2: #0d1221;
       --surface3: #111827;
+
       --border: rgba(255,255,255,0.07);
       --border-glow: rgba(0,255,102,0.3);
+
       --green: #00ff66;
       --green-dim: #00cc52;
       --red: #ff3b30;
       --gold: #ffd700;
       --blue: #4f9eff;
+
       --text: #f0f4ff;
       --text2: #8892a8;
       --text3: #4a5568;
+
       --font-display: 'Bebas Neue', sans-serif;
       --font-heading: 'Syne', sans-serif;
       --font-body: 'DM Sans', sans-serif;
+
       --radius: 16px;
       --radius-lg: 24px;
-      --shadow: 0 8px 32px rgba(0,0,0,0.5);
-      --shadow-glow: 0 0 40px rgba(0,255,102,0.15);
+
+      --shadow: 0 10px 40px rgba(0,0,0,0.45);
+      --shadow-glow: 0 0 50px rgba(0,255,102,0.12);
+
+      --container: 1400px;
     }
-    html { scroll-behavior: smooth; }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
+
     body {
-      background: var(--bg);
+      background:
+        radial-gradient(circle at top left, rgba(0,255,102,0.08), transparent 35%),
+        radial-gradient(circle at bottom right, rgba(79,158,255,0.08), transparent 35%),
+        var(--bg);
+
       color: var(--text);
       font-family: var(--font-body);
+
       min-height: 100vh;
       overflow-x: hidden;
+
       -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
     }
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: var(--surface); }
-    ::-webkit-scrollbar-thumb { background: #1a2540; border-radius: 99px; }
-    ::-webkit-scrollbar-thumb:hover { background: var(--green-dim); }
-    input, select, textarea {
-      font-family: var(--font-body);
+
+    img,
+    svg,
+    video,
+    canvas {
+      display: block;
+      max-width: 100%;
+    }
+
+    button,
+    input,
+    textarea,
+    select {
+      font: inherit;
       outline: none;
       border: none;
     }
-    button { cursor: pointer; border: none; font-family: var(--font-body); }
-    a { text-decoration: none; color: inherit; }
+
+    button {
+      cursor: pointer;
+      user-select: none;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    ul {
+      list-style: none;
+    }
+
+    section {
+      width: 100%;
+      position: relative;
+    }
+
+    .container {
+      width: 100%;
+      max-width: var(--container);
+      margin-inline: auto;
+      padding-inline: 24px;
+    }
+
+    .grid {
+      display: grid;
+      gap: 24px;
+    }
+
+    .flex {
+      display: flex;
+    }
+
+    .center {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .space-between {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* ========================= */
+    /* SCROLLBAR */
+    /* ========================= */
+
+    ::-webkit-scrollbar {
+      width: 7px;
+      height: 7px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--surface);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(
+        to bottom,
+        var(--green),
+        var(--green-dim)
+      );
+      border-radius: 999px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      opacity: 0.8;
+    }
+
+    /* ========================= */
+    /* ANIMATIONS */
+    /* ========================= */
+
     @keyframes pulse-glow {
-      0%, 100% { box-shadow: 0 0 10px rgba(0,255,102,0.4), 0 0 30px rgba(0,255,102,0.1); }
-      50% { box-shadow: 0 0 20px rgba(0,255,102,0.7), 0 0 60px rgba(0,255,102,0.25); }
+      0%,100% {
+        box-shadow:
+          0 0 12px rgba(0,255,102,0.3),
+          0 0 40px rgba(0,255,102,0.08);
+      }
+
+      50% {
+        box-shadow:
+          0 0 24px rgba(0,255,102,0.65),
+          0 0 80px rgba(0,255,102,0.2);
+      }
     }
+
     @keyframes float {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-10px); }
+      0%,100% {
+        transform: translateY(0px);
+      }
+
+      50% {
+        transform: translateY(-10px);
+      }
     }
+
     @keyframes spin-slow {
-      to { transform: rotate(360deg); }
+      to {
+        transform: rotate(360deg);
+      }
     }
+
     @keyframes shimmer {
-      0% { background-position: -200% center; }
-      100% { background-position: 200% center; }
+      0% {
+        background-position: -200% center;
+      }
+
+      100% {
+        background-position: 200% center;
+      }
     }
+
     @keyframes gradient-shift {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
+      0% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
+      }
     }
+
     @keyframes ripple {
-      0% { transform: scale(0); opacity: 0.5; }
-      100% { transform: scale(4); opacity: 0; }
+      0% {
+        transform: scale(0);
+        opacity: 0.45;
+      }
+
+      100% {
+        transform: scale(4);
+        opacity: 0;
+      }
     }
+
     @keyframes scanline {
-      0% { transform: translateY(-100%); }
-      100% { transform: translateY(100vh); }
+      0% {
+        transform: translateY(-100%);
+      }
+
+      100% {
+        transform: translateY(100vh);
+      }
     }
+
     @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.3; }
+      0%,100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.25;
+      }
     }
+
+    @keyframes border-flow {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      100% {
+        background-position: 200% 50%;
+      }
+    }
+
+    /* ========================= */
+    /* GLASS */
+    /* ========================= */
+
     .glass {
-      background: rgba(13, 18, 33, 0.7);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid var(--border);
+      background: rgba(13, 18, 33, 0.72);
+
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
+
+      border: 1px solid rgba(255,255,255,0.06);
+
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.03),
+        var(--shadow);
     }
+
     .glass-bright {
-      background: rgba(20, 28, 50, 0.85);
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
-      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(20, 28, 50, 0.82);
+
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+
+      border: 1px solid rgba(255,255,255,0.08);
+
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.05),
+        0 10px 60px rgba(0,0,0,0.45);
     }
+
+    .glass-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius-lg);
+    }
+
+    .glass-card::before {
+      content: "";
+
+      position: absolute;
+      inset: 0;
+
+      padding: 1px;
+      border-radius: inherit;
+
+      background: linear-gradient(
+        120deg,
+        transparent,
+        rgba(255,255,255,0.08),
+        transparent
+      );
+
+      -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+
+      pointer-events: none;
+    }
+
+    /* ========================= */
+    /* TEXT */
+    /* ========================= */
+
+    .title-xl {
+      font-family: var(--font-display);
+      font-size: clamp(3rem, 10vw, 7rem);
+      line-height: 0.9;
+      letter-spacing: 2px;
+    }
+
+    .title-lg {
+      font-family: var(--font-heading);
+      font-size: clamp(2rem, 5vw, 4rem);
+      font-weight: 800;
+      line-height: 1.1;
+    }
+
+    .title-md {
+      font-family: var(--font-heading);
+      font-size: clamp(1.4rem, 3vw, 2.2rem);
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .text-muted {
+      color: var(--text2);
+      line-height: 1.7;
+    }
+
     .glow-text {
-      text-shadow: 0 0 20px rgba(0,255,102,0.5);
+      text-shadow: 0 0 22px rgba(0,255,102,0.45);
     }
+
     .shimmer-text {
-      background: linear-gradient(90deg, #fff 25%, var(--green) 50%, #fff 75%);
+      background: linear-gradient(
+        90deg,
+        #ffffff 20%,
+        var(--green) 50%,
+        #ffffff 80%
+      );
+
       background-size: 200% auto;
+
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      animation: shimmer 3s linear infinite;
+
+      animation: shimmer 4s linear infinite;
     }
+
+    .gradient-text {
+      background: linear-gradient(
+        135deg,
+        #ffffff,
+        var(--green),
+        #4f9eff
+      );
+
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* ========================= */
+    /* BUTTONS */
+    /* ========================= */
+
     .btn-primary {
-      background: linear-gradient(135deg, var(--green) 0%, #00b347 100%);
-      color: #000;
-      font-weight: 700;
-      font-family: var(--font-heading);
-      border-radius: 12px;
-      padding: 14px 28px;
-      font-size: 15px;
-      letter-spacing: 0.5px;
-      transition: all 0.2s;
       position: relative;
       overflow: hidden;
+
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+
+      padding: 15px 28px;
+
+      border-radius: 14px;
+
+      background: linear-gradient(
+        135deg,
+        var(--green) 0%,
+        #00c853 100%
+      );
+
+      color: #000;
+
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+
+      transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        opacity 0.25s ease;
     }
+
     .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 30px rgba(0,255,102,0.35);
+      transform: translateY(-3px);
+
+      box-shadow:
+        0 12px 35px rgba(0,255,102,0.35),
+        0 0 50px rgba(0,255,102,0.12);
     }
-    .btn-primary:active { transform: translateY(0); }
+
+    .btn-primary:active {
+      transform: scale(0.98);
+    }
+
+    .btn-primary::before {
+      content: "";
+
+      position: absolute;
+      inset: 0;
+
+      background: linear-gradient(
+        120deg,
+        transparent,
+        rgba(255,255,255,0.25),
+        transparent
+      );
+
+      transform: translateX(-100%);
+      transition: transform 0.8s ease;
+    }
+
+    .btn-primary:hover::before {
+      transform: translateX(100%);
+    }
+
     .btn-secondary {
-      background: transparent;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+
+      padding: 14px 24px;
+
+      border-radius: 14px;
+
+      background: rgba(255,255,255,0.02);
+
+      border: 1px solid rgba(255,255,255,0.08);
+
       color: var(--text);
-      font-weight: 600;
-      font-family: var(--font-heading);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 13px 24px;
-      font-size: 14px;
-      transition: all 0.2s;
+
+      font-weight: 700;
+
+      transition: all 0.25s ease;
     }
+
     .btn-secondary:hover {
       border-color: var(--green);
       color: var(--green);
+
       background: rgba(0,255,102,0.05);
+
+      transform: translateY(-2px);
     }
+
     .btn-danger {
-      background: linear-gradient(135deg, var(--red) 0%, #a00 100%);
-      color: #fff;
-      font-weight: 600;
-      border-radius: 10px;
-      padding: 8px 16px;
+      padding: 10px 18px;
+
+      border-radius: 12px;
+
+      background: linear-gradient(
+        135deg,
+        var(--red),
+        #b30000
+      );
+
+      color: white;
+
       font-size: 13px;
-      transition: all 0.2s;
+      font-weight: 700;
+
+      transition: all 0.25s ease;
     }
-    .btn-danger:hover { opacity: 0.85; transform: scale(0.98); }
+
+    .btn-danger:hover {
+      transform: scale(0.97);
+      opacity: 0.9;
+    }
+
+    .btn-full {
+      width: 100%;
+    }
+
+    /* ========================= */
+    /* FORMS */
+    /* ========================= */
+
     .field {
       display: flex;
       flex-direction: column;
-      gap: 8px;
-    }
-    .field label {
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 1.2px;
-      text-transform: uppercase;
-      color: var(--text2);
-      font-family: var(--font-heading);
-    }
-    .field input, .field select {
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 12px;
-      padding: 13px 16px;
-      color: var(--text);
-      font-size: 15px;
-      font-family: var(--font-body);
-      transition: all 0.2s;
+      gap: 10px;
       width: 100%;
     }
-    .field input:focus, .field select:focus {
-      border-color: var(--green);
-      background: rgba(0,255,102,0.04);
-      box-shadow: 0 0 0 3px rgba(0,255,102,0.08);
+
+    .field label {
+      color: var(--text2);
+
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+
+      font-family: var(--font-heading);
     }
-    .field select option { background: #0d1221; }
+
+    .field input,
+    .field textarea,
+    .field select {
+      width: 100%;
+
+      background: rgba(255,255,255,0.04);
+
+      border: 1px solid rgba(255,255,255,0.08);
+
+      border-radius: 14px;
+
+      padding: 15px 18px;
+
+      color: var(--text);
+
+      transition:
+        border-color 0.25s ease,
+        background 0.25s ease,
+        box-shadow 0.25s ease;
+    }
+
+    .field textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    .field input::placeholder,
+    .field textarea::placeholder {
+      color: var(--text3);
+    }
+
+    .field input:focus,
+    .field textarea:focus,
+    .field select:focus {
+      border-color: var(--green);
+
+      background: rgba(0,255,102,0.04);
+
+      box-shadow:
+        0 0 0 3px rgba(0,255,102,0.08),
+        0 0 25px rgba(0,255,102,0.08);
+    }
+
+    .field select option {
+      background: #0d1221;
+    }
+
+    /* ========================= */
+    /* SLOT */
+    /* ========================= */
+
+    .slot-available,
+    .slot-booked,
+    .slot-active {
+      padding: 12px 14px;
+
+      border-radius: 14px;
+
+      font-size: 14px;
+      font-weight: 700;
+
+      transition: all 0.25s ease;
+    }
+
     .slot-available {
-      background: rgba(0,255,102,0.1);
-      border: 1px solid rgba(0,255,102,0.3);
+      background: rgba(0,255,102,0.08);
+
+      border: 1px solid rgba(0,255,102,0.22);
+
       color: var(--green);
     }
+
+    .slot-available:hover {
+      transform: translateY(-2px);
+
+      background: rgba(0,255,102,0.14);
+    }
+
     .slot-booked {
-      background: rgba(255,59,48,0.1);
-      border: 1px solid rgba(255,59,48,0.3);
+      background: rgba(255,59,48,0.08);
+
+      border: 1px solid rgba(255,59,48,0.25);
+
       color: var(--red);
+
       cursor: not-allowed;
     }
+
     .slot-active {
-      animation: pulse-glow 2s infinite;
-      background: rgba(0,255,102,0.15);
+      background: rgba(0,255,102,0.14);
+
       border: 1px solid var(--green);
+
       color: var(--green);
+
+      animation: pulse-glow 2s infinite;
     }
+
+    /* ========================= */
+    /* CARDS */
+    /* ========================= */
+
+    .card {
+      border-radius: var(--radius-lg);
+      padding: 24px;
+    }
+
+    .card-hover {
+      transition:
+        transform 0.3s ease,
+        border-color 0.3s ease,
+        box-shadow 0.3s ease;
+    }
+
+    .card-hover:hover {
+      transform: translateY(-6px);
+
+      border-color: rgba(0,255,102,0.2);
+
+      box-shadow:
+        0 10px 40px rgba(0,0,0,0.4),
+        0 0 30px rgba(0,255,102,0.08);
+    }
+
+    /* ========================= */
+    /* RESPONSIVE */
+    /* ========================= */
+
+    @media (max-width: 1200px) {
+      .container {
+        padding-inline: 20px;
+      }
+
+      .card {
+        padding: 22px;
+      }
+    }
+
+    @media (max-width: 992px) {
+      .title-xl {
+        font-size: clamp(3rem, 12vw, 5rem);
+      }
+
+      .title-lg {
+        font-size: clamp(2rem, 7vw, 3rem);
+      }
+
+      .grid-lg-2 {
+        grid-template-columns: 1fr !important;
+      }
+
+      .hide-tablet {
+        display: none !important;
+      }
+    }
+
     @media (max-width: 768px) {
-      .hide-mobile { display: none !important; }
+      html {
+        font-size: 15px;
+      }
+
+      .container {
+        padding-inline: 16px;
+      }
+
+      .card {
+        padding: 18px;
+        border-radius: 20px;
+      }
+
+      .btn-primary,
+      .btn-secondary {
+        width: 100%;
+      }
+
+      .field input,
+      .field textarea,
+      .field select {
+        padding: 14px 16px;
+        font-size: 14px;
+      }
+
+      .hide-mobile {
+        display: none !important;
+      }
+
+      .mobile-column {
+        flex-direction: column !important;
+      }
+
+      .mobile-center {
+        text-align: center !important;
+        align-items: center !important;
+        justify-content: center !important;
+      }
+
+      .mobile-full {
+        width: 100% !important;
+      }
+
+      .mobile-grid-1 {
+        grid-template-columns: 1fr !important;
+      }
+
+      .mobile-gap-sm {
+        gap: 12px !important;
+      }
     }
+
+    @media (max-width: 480px) {
+      html {
+        font-size: 14px;
+      }
+
+      .container {
+        padding-inline: 14px;
+      }
+
+      .title-xl {
+        line-height: 1;
+      }
+
+      .card {
+        padding: 16px;
+      }
+
+      .btn-primary,
+      .btn-secondary {
+        padding: 14px 18px;
+        font-size: 14px;
+      }
+
+      .field label {
+        font-size: 11px;
+      }
+
+      .slot-available,
+      .slot-booked,
+      .slot-active {
+        font-size: 13px;
+        padding: 10px 12px;
+      }
+    }
+
     @media (min-width: 769px) {
-      .hide-desktop { display: none !important; }
+      .hide-desktop {
+        display: none !important;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
     }
   `}</style>
 );
@@ -573,7 +1162,16 @@ function StadiumsPage({ setPage, bookings }) {
 // ─── BOOKING FORM ─────────────────────────────────────────────────────────────
 function BookingPage({ bookings, onBookingCreated }) {
   const toast = useToast();
-  const [form, setForm] = useState({ name: '', phone: '', stadium: 'open', date: TODAY(), startTime: '08', duration: 1 });
+
+  const [form, setForm] = useState({
+    name: '',
+    phone: '',
+    stadium: 'open',
+    date: TODAY(),
+    startTime: '08',
+    duration: 1
+  });
+
   const [loading, setLoading] = useState(false);
   const [successData, setSuccessData] = useState(null);
   const [bookedSlots, setBookedSlots] = useState([]);
@@ -583,177 +1181,1001 @@ function BookingPage({ bookings, onBookingCreated }) {
 
   useEffect(() => {
     const taken = bookings
-      .filter(b => b.stadium === form.stadium && b.date === form.date && b.status !== 'cancelled')
+      .filter(
+        b =>
+          b.stadium === form.stadium &&
+          b.date === form.date &&
+          b.status !== 'cancelled'
+      )
       .flatMap(b => b.bookedSlots);
+
     setBookedSlots([...new Set(taken)]);
   }, [bookings, form.stadium, form.date]);
 
   const isSlotConflict = () => {
-    const slots = Array.from({ length: form.duration }, (_, i) => startHour + i);
+    const slots = Array.from(
+      { length: form.duration },
+      (_, i) => startHour + i
+    );
+
     return slots.some(s => bookedSlots.includes(s));
   };
 
   const handleSubmit = async () => {
-    if (!form.name.trim() || !form.phone.trim()) return toast('Barcha maydonlarni to\'ldiring', 'error');
-    if (form.phone.length < 9) return toast('To\'g\'ri telefon raqam kiriting', 'error');
-    if (startHour < 6 || startHour + form.duration > 24) return toast('Bronlash 06:00–00:00 oralig\'ida bo\'lishi kerak', 'error');
-    if (isSlotConflict()) return toast('Tanlangan vaqt allaqachon band!', 'error');
+    if (!form.name.trim() || !form.phone.trim()) {
+      return toast("Barcha maydonlarni to'ldiring", 'error');
+    }
+
+    if (form.phone.length < 9) {
+      return toast("To'g'ri telefon raqam kiriting", 'error');
+    }
+
+    if (startHour < 6 || startHour + form.duration > 24) {
+      return toast(
+        "Bronlash 06:00–00:00 oralig'ida bo'lishi kerak",
+        'error'
+      );
+    }
+
+    if (isSlotConflict()) {
+      return toast('Tanlangan vaqt allaqachon band!', 'error');
+    }
+
     setLoading(true);
+
     try {
       const res = await API.post('/bookings', {
-        name: form.name, phone: form.phone, stadium: form.stadium,
-        date: form.date, startTime: `${pad(startHour)}:00`, duration: form.duration,
+        name: form.name,
+        phone: form.phone,
+        stadium: form.stadium,
+        date: form.date,
+        startTime: `${pad(startHour)}:00`,
+        duration: form.duration,
       });
+
       setSuccessData(res.data.booking);
       onBookingCreated(res.data.booking);
+
       toast('Bronlash tasdiqlandi! 🎉', 'success');
     } catch (err) {
-      toast(err.response?.data?.message || 'Bronlash amalga oshmadi. Qaytadan urinib ko\'ring.', 'error');
+      toast(
+        err.response?.data?.message ||
+        "Bronlash amalga oshmadi. Qaytadan urinib ko'ring.",
+        'error'
+      );
     }
+
     setLoading(false);
   };
 
   const isConflict = isSlotConflict();
 
   return (
-    <div style={{ minHeight: '100vh', paddingTop: 90, paddingBottom: 60 }}>
-      <div style={{ maxWidth: 780, margin: '0 auto', padding: '0 24px' }}>
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-          <h1 style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 52, letterSpacing: 3, marginBottom: 6 }}>STADION BRONLASH</h1>
-          <p style={{ color: 'var(--text2)', marginBottom: 36 }}>Maydoningizni band qilish uchun ma'lumotlarni kiriting</p>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 40, alignItems: 'start' }}>
-            {/* Form */}
-            <div className="glass" style={{ borderRadius: 24, padding: '32px 28px', display: 'flex', flexDirection: 'column', gap: 20 }}>
-              <div className="field">
-                <label>To'liq Ism</label>
-                <input placeholder="To'liq ismingiz" value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} />
-              </div>
-              <div className="field">
-                <label>Telefon Raqam</label>
-                <input placeholder="+998 90 123 45 67" value={form.phone} onChange={e => setForm(f => ({ ...f, phone: e.target.value }))} />
-              </div>
-              <div className="field">
-                <label>Stadion</label>
-                <select value={form.stadium} onChange={e => setForm(f => ({ ...f, stadium: e.target.value }))}>
-                  {STADIUMS.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
-                </select>
-              </div>
-              <div className="field">
-                <label>Sana</label>
-                <input type="date" value={form.date} min={TODAY()} onChange={e => setForm(f => ({ ...f, date: e.target.value }))} />
-              </div>
-              <div className="field">
-                <label>Boshlanish Vaqti</label>
-                <select value={form.startTime} onChange={e => setForm(f => ({ ...f, startTime: e.target.value }))}>
-                  {HOURS.slice(0, 18).map(h => <option key={h} value={h}>{fmtHour(h)}</option>)}
-                </select>
-              </div>
-              <div className="field">
-                <label>Davomiyligi (soat)</label>
-                <select value={form.duration} onChange={e => setForm(f => ({ ...f, duration: parseInt(e.target.value) }))}>
-                  {[1, 2, 3, 4, 5, 6].map(d => <option key={d} value={d}>{d} soat</option>)}
-                </select>
-              </div>
-              {isConflict && (
-                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-                  style={{ background: 'rgba(255,59,48,0.1)', border: '1px solid rgba(255,59,48,0.3)', borderRadius: 10, padding: '10px 14px', fontSize: 13, color: 'var(--red)' }}>
-                  ⚠️ Vaqt to'qnashuvi aniqlandi. Boshqa vaqt tanlang.
-                </motion.div>
-              )}
-              {/* Price summary */}
-              <div style={{ background: 'rgba(0,255,102,0.05)', border: '1px solid rgba(0,255,102,0.15)', borderRadius: 14, padding: '16px 18px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, color: 'var(--text2)', marginBottom: 6 }}>
-                  <span>{form.duration} soat × 200,000 UZS</span>
-                </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: 13 }}>JAMI</span>
-                  <span style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 26, color: 'var(--green)', letterSpacing: 1 }}>{UZS(totalPrice)}</span>
-                </div>
-              </div>
-              <button onClick={handleSubmit} disabled={loading || isConflict} className="btn-primary"
-                style={{ width: '100%', padding: '16px', fontSize: 15, opacity: (loading || isConflict) ? 0.6 : 1, cursor: (loading || isConflict) ? 'not-allowed' : 'pointer' }}>
-                {loading ? 'Tasdiqlanmoqda...' : '⚽ Bronlashni Tasdiqlash'}
-              </button>
+    <div
+      style={{
+        minHeight: '100vh',
+        paddingTop: 110,
+        paddingBottom: 80,
+        position: 'relative',
+        overflow: 'hidden',
+      }}
+    >
+      {/* Background Effects */}
+      <div
+        style={{
+          position: 'absolute',
+          top: -200,
+          left: -200,
+          width: 500,
+          height: 500,
+          borderRadius: '50%',
+          background: 'rgba(0,255,102,0.08)',
+          filter: 'blur(120px)',
+          pointerEvents: 'none',
+        }}
+      />
+
+      <div
+        style={{
+          position: 'absolute',
+          bottom: -250,
+          right: -250,
+          width: 500,
+          height: 500,
+          borderRadius: '50%',
+          background: 'rgba(79,158,255,0.08)',
+          filter: 'blur(120px)',
+          pointerEvents: 'none',
+        }}
+      />
+
+      <div
+        style={{
+          maxWidth: 1400,
+          margin: '0 auto',
+          padding: '0 20px',
+          position: 'relative',
+          zIndex: 2,
+        }}
+      >
+        <motion.div
+          initial={{ opacity: 0, y: 35 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          {/* Header */}
+          <div
+            style={{
+              marginBottom: 40,
+              textAlign: 'center',
+            }}
+          >
+            <div
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 10,
+                padding: '10px 18px',
+                borderRadius: 999,
+                border: '1px solid rgba(0,255,102,0.2)',
+                background: 'rgba(0,255,102,0.06)',
+                color: 'var(--green)',
+                fontSize: 13,
+                fontWeight: 700,
+                marginBottom: 20,
+              }}
+            >
+              ⚡ ONLINE BRONLASH TIZIMI
             </div>
-            {/* Slot visualizer */}
-            <div>
-              <div className="glass" style={{ borderRadius: 24, padding: '24px 20px' }}>
-                <h3 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: 16, marginBottom: 16 }}>Vaqt Slotlari Mavjudligi</h3>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 6 }}>
-                  {HOURS.map(h => {
-                    const isBooked = bookedSlots.includes(h);
-                    const isSelected = h >= startHour && h < startHour + form.duration;
-                    const isOverlap = isSelected && isBooked;
-                    return (
-                      <div key={h}
+
+            <h1
+              style={{
+                fontFamily: 'Bebas Neue, sans-serif',
+                fontSize: 'clamp(52px, 10vw, 110px)',
+                lineHeight: 0.9,
+                letterSpacing: 4,
+                marginBottom: 16,
+              }}
+            >
+              <span className="shimmer-text">
+                STADION
+              </span>
+              <br />
+              BRONLASH
+            </h1>
+
+            <p
+              style={{
+                maxWidth: 700,
+                margin: '0 auto',
+                color: 'var(--text2)',
+                fontSize: 'clamp(14px, 2vw, 18px)',
+                lineHeight: 1.7,
+              }}
+            >
+              Premium stadionni bir necha soniyada band qiling.
+              Bo‘sh vaqtlarni kuzating va online bronlashni amalga oshiring.
+            </p>
+          </div>
+
+          {/* Main Layout */}
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: '1.1fr 0.9fr',
+              gap: 28,
+              alignItems: 'start',
+            }}
+            className="booking-grid"
+          >
+            {/* LEFT */}
+            <motion.div
+              initial={{ opacity: 0, x: -35 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.1 }}
+              className="glass"
+              style={{
+                borderRadius: 32,
+                padding: '34px',
+                position: 'relative',
+                overflow: 'hidden',
+              }}
+            >
+              {/* Glow */}
+              <div
+                style={{
+                  position: 'absolute',
+                  top: -120,
+                  right: -120,
+                  width: 240,
+                  height: 240,
+                  borderRadius: '50%',
+                  background: 'rgba(0,255,102,0.08)',
+                  filter: 'blur(80px)',
+                }}
+              />
+
+              <div
+                style={{
+                  position: 'relative',
+                  zIndex: 2,
+                }}
+              >
+                <div
+                  style={{
+                    marginBottom: 28,
+                  }}
+                >
+                  <h2
+                    style={{
+                      fontFamily: 'Syne, sans-serif',
+                      fontSize: 28,
+                      fontWeight: 800,
+                      marginBottom: 8,
+                    }}
+                  >
+                    Ma'lumotlarni kiriting
+                  </h2>
+
+                  <p
+                    style={{
+                      color: 'var(--text2)',
+                      fontSize: 14,
+                    }}
+                  >
+                    Stadion bron qilish uchun formani to‘ldiring
+                  </p>
+                </div>
+
+                {/* FORM */}
+                <div
+                  style={{
+                    display: 'grid',
+                    gap: 20,
+                  }}
+                >
+                  <div className="field">
+                    <label>To‘liq Ism</label>
+
+                    <input
+                      placeholder="To‘liq ismingiz"
+                      value={form.name}
+                      onChange={e =>
+                        setForm(f => ({
+                          ...f,
+                          name: e.target.value,
+                        }))
+                      }
+                    />
+                  </div>
+
+                  <div className="field">
+                    <label>Telefon Raqam</label>
+
+                    <input
+                      placeholder="+998 90 123 45 67"
+                      value={form.phone}
+                      onChange={e =>
+                        setForm(f => ({
+                          ...f,
+                          phone: e.target.value,
+                        }))
+                      }
+                    />
+                  </div>
+
+                  <div
+                    style={{
+                      display: 'grid',
+                      gridTemplateColumns: '1fr 1fr',
+                      gap: 18,
+                    }}
+                    className="booking-form-grid"
+                  >
+                    <div className="field">
+                      <label>Stadion</label>
+
+                      <select
+                        value={form.stadium}
+                        onChange={e =>
+                          setForm(f => ({
+                            ...f,
+                            stadium: e.target.value,
+                          }))
+                        }
+                      >
+                        {STADIUMS.map(s => (
+                          <option key={s.id} value={s.id}>
+                            {s.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div className="field">
+                      <label>Sana</label>
+
+                      <input
+                        type="date"
+                        value={form.date}
+                        min={TODAY()}
+                        onChange={e =>
+                          setForm(f => ({
+                            ...f,
+                            date: e.target.value,
+                          }))
+                        }
+                      />
+                    </div>
+                  </div>
+
+                  <div
+                    style={{
+                      display: 'grid',
+                      gridTemplateColumns: '1fr 1fr',
+                      gap: 18,
+                    }}
+                    className="booking-form-grid"
+                  >
+                    <div className="field">
+                      <label>Boshlanish Vaqti</label>
+
+                      <select
+                        value={form.startTime}
+                        onChange={e =>
+                          setForm(f => ({
+                            ...f,
+                            startTime: e.target.value,
+                          }))
+                        }
+                      >
+                        {HOURS.slice(0, 18).map(h => (
+                          <option key={h} value={h}>
+                            {fmtHour(h)}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div className="field">
+                      <label>Davomiyligi</label>
+
+                      <select
+                        value={form.duration}
+                        onChange={e =>
+                          setForm(f => ({
+                            ...f,
+                            duration: parseInt(e.target.value),
+                          }))
+                        }
+                      >
+                        {[1, 2, 3, 4, 5, 6].map(d => (
+                          <option key={d} value={d}>
+                            {d} soat
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* Warning */}
+                  <AnimatePresence>
+                    {isConflict && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0 }}
                         style={{
-                          borderRadius: 8, padding: '8px 0', textAlign: 'center', fontSize: 12,
-                          fontFamily: 'Syne, sans-serif', fontWeight: 600,
-                          background: isOverlap ? 'rgba(255,59,48,0.2)' : isSelected ? 'rgba(0,255,102,0.15)' : isBooked ? 'rgba(255,59,48,0.1)' : 'rgba(255,255,255,0.03)',
-                          border: isOverlap ? '1px solid rgba(255,59,48,0.5)' : isSelected ? '1px solid rgba(0,255,102,0.4)' : isBooked ? '1px solid rgba(255,59,48,0.3)' : '1px solid rgba(255,255,255,0.05)',
-                          color: isOverlap ? 'var(--red)' : isSelected ? 'var(--green)' : isBooked ? 'var(--red)' : 'var(--text3)',
-                          transition: 'all 0.15s',
-                        }}>
-                        {fmtHour(h)}
+                          padding: '14px 16px',
+                          borderRadius: 16,
+                          background: 'rgba(255,59,48,0.08)',
+                          border: '1px solid rgba(255,59,48,0.25)',
+                          color: 'var(--red)',
+                          fontSize: 13,
+                          fontWeight: 600,
+                        }}
+                      >
+                        ⚠️ Tanlangan vaqt band qilingan.
+                        Iltimos boshqa vaqt tanlang.
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+
+                  {/* PRICE */}
+                  <div
+                    style={{
+                      background:
+                        'linear-gradient(145deg, rgba(0,255,102,0.08), rgba(0,255,102,0.03))',
+
+                      border:
+                        '1px solid rgba(0,255,102,0.15)',
+
+                      borderRadius: 24,
+
+                      padding: '22px 24px',
+
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: 16,
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        color: 'var(--text2)',
+                        fontSize: 14,
+                      }}
+                    >
+                      <span>
+                        {form.duration} soat × 200,000 UZS
+                      </span>
+
+                      <span>
+                        ⚽ Stadion Narxi
+                      </span>
+                    </div>
+
+                    <div
+                      style={{
+                        width: '100%',
+                        height: 1,
+                        background: 'rgba(255,255,255,0.06)',
+                      }}
+                    />
+
+                    <div
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'end',
+                      }}
+                    >
+                      <div>
+                        <div
+                          style={{
+                            color: 'var(--text2)',
+                            fontSize: 12,
+                            marginBottom: 4,
+                          }}
+                        >
+                          Umumiy To‘lov
+                        </div>
+
+                        <div
+                          style={{
+                            fontFamily: 'Bebas Neue, sans-serif',
+                            fontSize: 42,
+                            color: 'var(--green)',
+                            letterSpacing: 2,
+                            lineHeight: 1,
+                          }}
+                        >
+                          {UZS(totalPrice)}
+                        </div>
                       </div>
+
+                      <div
+                        style={{
+                          width: 60,
+                          height: 60,
+                          borderRadius: 18,
+                          background: 'rgba(0,255,102,0.12)',
+                          border:
+                            '1px solid rgba(0,255,102,0.2)',
+
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+
+                          fontSize: 28,
+                        }}
+                      >
+                        💳
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* BUTTON */}
+                  <button
+                    onClick={handleSubmit}
+                    disabled={loading || isConflict}
+                    className="btn-primary"
+                    style={{
+                      width: '100%',
+                      padding: '18px',
+                      borderRadius: 18,
+                      fontSize: 15,
+                      opacity:
+                        loading || isConflict ? 0.6 : 1,
+                      cursor:
+                        loading || isConflict
+                          ? 'not-allowed'
+                          : 'pointer',
+                    }}
+                  >
+                    {loading
+                      ? 'Tasdiqlanmoqda...'
+                      : '⚽ Bronlashni Tasdiqlash'}
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* RIGHT */}
+            <motion.div
+              initial={{ opacity: 0, x: 35 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.15 }}
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 24,
+              }}
+            >
+              {/* SLOT */}
+              <div
+                className="glass"
+                style={{
+                  borderRadius: 32,
+                  padding: '28px 24px',
+                }}
+              >
+                <div
+                  style={{
+                    marginBottom: 22,
+                  }}
+                >
+                  <h3
+                    style={{
+                      fontFamily: 'Syne, sans-serif',
+                      fontWeight: 800,
+                      fontSize: 22,
+                      marginBottom: 6,
+                    }}
+                  >
+                    Vaqt Slotlari
+                  </h3>
+
+                  <p
+                    style={{
+                      color: 'var(--text2)',
+                      fontSize: 13,
+                    }}
+                  >
+                    Mavjud va band vaqtlarni kuzating
+                  </p>
+                </div>
+
+                <div
+                  style={{
+                    display: 'grid',
+                    gridTemplateColumns:
+                      'repeat(auto-fit, minmax(90px, 1fr))',
+                    gap: 10,
+                  }}
+                >
+                  {HOURS.map(h => {
+                    const isBooked =
+                      bookedSlots.includes(h);
+
+                    const isSelected =
+                      h >= startHour &&
+                      h < startHour + form.duration;
+
+                    const isOverlap =
+                      isSelected && isBooked;
+
+                    return (
+                      <motion.div
+                        whileHover={{ y: -2 }}
+                        key={h}
+                        style={{
+                          borderRadius: 14,
+                          padding: '12px 0',
+                          textAlign: 'center',
+
+                          fontSize: 13,
+
+                          fontFamily:
+                            'Syne, sans-serif',
+
+                          fontWeight: 700,
+
+                          background: isOverlap
+                            ? 'rgba(255,59,48,0.18)'
+                            : isSelected
+                              ? 'rgba(0,255,102,0.15)'
+                              : isBooked
+                                ? 'rgba(255,59,48,0.08)'
+                                : 'rgba(255,255,255,0.03)',
+
+                          border: isOverlap
+                            ? '1px solid rgba(255,59,48,0.45)'
+                            : isSelected
+                              ? '1px solid rgba(0,255,102,0.4)'
+                              : isBooked
+                                ? '1px solid rgba(255,59,48,0.25)'
+                                : '1px solid rgba(255,255,255,0.06)',
+
+                          color: isOverlap
+                            ? 'var(--red)'
+                            : isSelected
+                              ? 'var(--green)'
+                              : isBooked
+                                ? 'var(--red)'
+                                : 'var(--text2)',
+
+                          transition: 'all 0.2s ease',
+                        }}
+                      >
+                        {fmtHour(h)}
+                      </motion.div>
                     );
                   })}
                 </div>
-                <div style={{ marginTop: 16, fontSize: 11, color: 'var(--text3)', display: 'flex', flexDirection: 'column', gap: 6 }}>
-                  <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-                    <div style={{ width: 10, height: 10, borderRadius: 3, background: 'rgba(0,255,102,0.15)', border: '1px solid rgba(0,255,102,0.4)' }} />
-                    Sizning tanlovingiz
-                  </div>
-                  <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-                    <div style={{ width: 10, height: 10, borderRadius: 3, background: 'rgba(255,59,48,0.1)', border: '1px solid rgba(255,59,48,0.3)' }} />
-                    Allaqachon band
-                  </div>
+
+                {/* Legend */}
+                <div
+                  style={{
+                    marginTop: 24,
+                    display: 'grid',
+                    gap: 12,
+                  }}
+                >
+                  {[
+                    [
+                      'rgba(0,255,102,0.15)',
+                      'rgba(0,255,102,0.4)',
+                      'Sizning tanlovingiz',
+                    ],
+                    [
+                      'rgba(255,59,48,0.08)',
+                      'rgba(255,59,48,0.3)',
+                      'Allaqachon band',
+                    ],
+                  ].map(([bg, border, label]) => (
+                    <div
+                      key={label}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 10,
+                        color: 'var(--text2)',
+                        fontSize: 13,
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: 14,
+                          height: 14,
+                          borderRadius: 5,
+                          background: bg,
+                          border: `1px solid ${border}`,
+                        }}
+                      />
+
+                      {label}
+                    </div>
+                  ))}
                 </div>
               </div>
-            </div>
+
+              {/* INFO */}
+              <div
+                className="glass"
+                style={{
+                  borderRadius: 32,
+                  padding: '28px 24px',
+                }}
+              >
+                <h3
+                  style={{
+                    fontFamily: 'Syne, sans-serif',
+                    fontWeight: 800,
+                    fontSize: 22,
+                    marginBottom: 18,
+                  }}
+                >
+                  Stadion Afzalliklari
+                </h3>
+
+                <div
+                  style={{
+                    display: 'grid',
+                    gap: 14,
+                  }}
+                >
+                  {[
+                    ['⚡', 'Yorug‘ LED Proektorlar'],
+                    ['🚗', 'Bepul Parking'],
+                    ['🥤', 'Mini Bar '],
+                  ].map(([icon, text]) => (
+                    <div
+                      key={text}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 14,
+
+                        padding: '14px 16px',
+
+                        borderRadius: 18,
+
+                        background:
+                          'rgba(255,255,255,0.03)',
+
+                        border:
+                          '1px solid rgba(255,255,255,0.05)',
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: 48,
+                          height: 48,
+                          borderRadius: 14,
+
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+
+                          background:
+                            'rgba(0,255,102,0.08)',
+
+                          border:
+                            '1px solid rgba(0,255,102,0.15)',
+
+                          fontSize: 22,
+                        }}
+                      >
+                        {icon}
+                      </div>
+
+                      <div
+                        style={{
+                          fontWeight: 600,
+                          fontSize: 14,
+                        }}
+                      >
+                        {text}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
           </div>
         </motion.div>
       </div>
 
-      {/* Success Modal */}
+      {/* SUCCESS MODAL */}
       <AnimatePresence>
         {successData && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 5000, padding: 24, backdropFilter: 'blur(8px)' }}
-            onClick={() => setSuccessData(null)}>
-            <motion.div initial={{ scale: 0.8, y: 40 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.8, opacity: 0 }}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setSuccessData(null)}
+            style={{
+              position: 'fixed',
+              inset: 0,
+
+              background: 'rgba(0,0,0,0.82)',
+
+              backdropFilter: 'blur(10px)',
+
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+
+              zIndex: 9999,
+
+              padding: 20,
+            }}
+          >
+            <motion.div
+              initial={{ scale: 0.8, y: 40 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              transition={{
+                type: 'spring',
+                stiffness: 180,
+                damping: 18,
+              }}
               onClick={e => e.stopPropagation()}
-              style={{ background: 'linear-gradient(145deg, #0d1221 0%, #080c16 100%)', border: '1px solid rgba(0,255,102,0.3)', borderRadius: 28, padding: '40px 36px', maxWidth: 440, width: '100%', boxShadow: '0 0 60px rgba(0,255,102,0.15), 0 40px 80px rgba(0,0,0,0.6)', textAlign: 'center' }}>
-              <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.2, type: 'spring', stiffness: 300 }}
-                style={{ fontSize: 64, marginBottom: 20 }}>🎉</motion.div>
-              <h2 style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 36, letterSpacing: 3, marginBottom: 6, color: 'var(--green)' }}>BRONLASH TASDIQLANDI!</h2>
-              <p style={{ color: 'var(--text2)', fontSize: 14, marginBottom: 28 }}>Stadioningiz muvaffaqiyatli band qilindi</p>
-              <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 16, padding: '20px 24px', textAlign: 'left', display: 'flex', flexDirection: 'column', gap: 12 }}>
+              className="glass"
+              style={{
+                width: '100%',
+                maxWidth: 520,
+
+                borderRadius: 34,
+
+                padding: '42px 34px',
+
+                textAlign: 'center',
+
+                border:
+                  '1px solid rgba(0,255,102,0.2)',
+
+                boxShadow:
+                  '0 0 60px rgba(0,255,102,0.12)',
+              }}
+            >
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{
+                  delay: 0.15,
+                  type: 'spring',
+                  stiffness: 260,
+                }}
+                style={{
+                  fontSize: 82,
+                  marginBottom: 18,
+                }}
+              >
+                🎉
+              </motion.div>
+
+              <h2
+                style={{
+                  fontFamily: 'Bebas Neue, sans-serif',
+                  fontSize: 'clamp(38px, 7vw, 60px)',
+                  lineHeight: 1,
+                  letterSpacing: 4,
+                  color: 'var(--green)',
+                  marginBottom: 12,
+                }}
+              >
+                BRON TASDIQLANDI
+              </h2>
+
+              <p
+                style={{
+                  color: 'var(--text2)',
+                  marginBottom: 28,
+                  fontSize: 14,
+                  lineHeight: 1.7,
+                }}
+              >
+                Stadion muvaffaqiyatli band qilindi
+              </p>
+
+              <div
+                style={{
+                  background: 'rgba(255,255,255,0.03)',
+
+                  border:
+                    '1px solid rgba(255,255,255,0.06)',
+
+                  borderRadius: 22,
+
+                  padding: '24px 22px',
+
+                  display: 'grid',
+                  gap: 16,
+
+                  textAlign: 'left',
+                }}
+              >
                 {[
-                  ['Bron ID', '#' + successData._id?.slice(-8).toUpperCase()],
-                  ['Stadion', STADIUMS.find(s => s.id === successData.stadium)?.name],
+                  [
+                    'Bron ID',
+                    '#' +
+                    successData._id
+                      ?.slice(-8)
+                      .toUpperCase(),
+                  ],
+
+                  [
+                    'Stadion',
+                    STADIUMS.find(
+                      s =>
+                        s.id ===
+                        successData.stadium
+                    )?.name,
+                  ],
+
                   ['Sana', successData.date],
-                  ['Vaqt', `${successData.startTime} — ${fmtHour(parseInt(successData.startTime) + successData.duration)}`],
-                  ['Davomiyligi', `${successData.duration} soat`],
-                  ['Jami', UZS(successData.totalPrice)],
+
+                  [
+                    'Vaqt',
+                    `${successData.startTime
+                    } — ${fmtHour(
+                      parseInt(
+                        successData.startTime
+                      ) + successData.duration
+                    )}`,
+                  ],
+
+                  [
+                    'Davomiyligi',
+                    `${successData.duration} soat`,
+                  ],
+
+                  [
+                    'Jami',
+                    UZS(successData.totalPrice),
+                  ],
                 ].map(([k, v]) => (
-                  <div key={k} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 14 }}>
-                    <span style={{ color: 'var(--text2)' }}>{k}</span>
-                    <span style={{ fontWeight: 600, color: k === 'Jami' ? 'var(--green)' : '#fff' }}>{v}</span>
+                  <div
+                    key={k}
+                    style={{
+                      display: 'flex',
+                      justifyContent:
+                        'space-between',
+
+                      gap: 20,
+
+                      fontSize: 14,
+                    }}
+                  >
+                    <span
+                      style={{
+                        color: 'var(--text2)',
+                      }}
+                    >
+                      {k}
+                    </span>
+
+                    <span
+                      style={{
+                        fontWeight: 700,
+                        color:
+                          k === 'Jami'
+                            ? 'var(--green)'
+                            : '#fff',
+
+                        textAlign: 'right',
+                      }}
+                    >
+                      {v}
+                    </span>
                   </div>
                 ))}
               </div>
-              <button onClick={() => setSuccessData(null)} className="btn-primary" style={{ width: '100%', marginTop: 24, padding: '14px' }}>
+
+              <button
+                onClick={() => setSuccessData(null)}
+                className="btn-primary"
+                style={{
+                  width: '100%',
+                  marginTop: 28,
+                  padding: '16px',
+                  borderRadius: 18,
+                }}
+              >
                 Tayyor
               </button>
             </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Mini Bar  */}
+      {/* Responsive */}
+      <style>{`
+        @media (max-width: 1100px) {
+          .booking-grid {
+            grid-template-columns: 1fr !important;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .booking-form-grid {
+            grid-template-columns: 1fr !important;
+          }
+        }
+
+        @media (max-width: 600px) {
+          .booking-grid {
+            gap: 20px !important;
+          }
+        }
+      `}</style>
     </div>
   );
 }
-
 // ─── ADMIN LOGIN ──────────────────────────────────────────────────────────────
 function AdminLogin({ onLogin }) {
   const toast = useToast();
@@ -1113,7 +2535,7 @@ export default function App() {
 
   // Fetch public bookings on mount
   useEffect(() => {
-    API.get('/bookings').then(r => setBookings(r.data)).catch(() => {});
+    API.get('/bookings').then(r => setBookings(r.data)).catch(() => { });
   }, []);
 
   // Realtime
@@ -1174,4 +2596,4 @@ export default function App() {
       )}
     </ToastProvider>
   );
-}
+}   
